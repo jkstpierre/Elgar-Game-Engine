@@ -1,3 +1,4 @@
+# Cmake stuff
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -7,3 +8,58 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+
+# Doxygen stuff
+*~
+.*sw?
+\#*
+.DS_Store
+
+*.rej
+*.orig
+
+*.pro
+/packages/rpm/doxygen.spec
+*.idb
+*.pdb
+
+/doxygen_docs
+/doxygen.tag
+/build*
+
+# C++ Stuff
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Test Project
+OceanBlack/
