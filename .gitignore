@@ -14,6 +14,8 @@ CTestTestfile.cmake
 .*sw?
 \#*
 .DS_Store
+html
+latex
 
 *.rej
 *.orig
