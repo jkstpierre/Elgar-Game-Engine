@@ -33,6 +33,7 @@ add_library(Elgar STATIC ${elgar_src})
 
 # Set the include directories
 target_include_directories(Elgar PRIVATE .)
+target_include_directories(Elgar PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(Elgar PRIVATE ${GLM_INCLUDE_DIRS})
 
 # Link the libraries

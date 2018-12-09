@@ -9,6 +9,7 @@
 
 // INCLUDES //
 
+#include "elgar/core/AudioSystem.hpp"
 
 namespace elgar {
 
@@ -19,6 +20,9 @@ namespace elgar {
   class Engine {
   private:
     static Engine *m_instance; // Instance of the engine class
+
+  private:
+    AudioSystem *m_audio_system;  // Instance of the audio system
 
   private:
     Engine(); // Default constructor
@@ -41,7 +45,16 @@ namespace elgar {
      * @return     The singleton instance of the engine, or nullptr if engine not initialized.
      */
     static Engine *GetInstance();
+
+  public:
+    /**
+     * @brief      Gets a handle to the audio system
+     *
+     * @return     A handle to the audio system
+     */
+    AudioSystem *GetAudioSystem();
   };
 
-};
+}
+
 #endif
