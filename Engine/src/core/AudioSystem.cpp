@@ -128,7 +128,7 @@ namespace elgar {
       }
 
       // Send the data to the new AudioBuffer
-      success = new_buffer->FillData(format, data, sample_count * channels * sizeof(int32_t), sample_rate);
+      success = new_buffer->FillData(format, data, sample_count * channels * sizeof(ALshort), sample_rate);
 
       // Check for error
       if (!success) {

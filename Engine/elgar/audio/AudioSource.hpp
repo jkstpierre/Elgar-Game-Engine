@@ -12,13 +12,14 @@
 #include <AL/al.h>
 
 #include "elgar/audio/AudioBuffer.hpp"
+#include "elgar/physics/Movable.hpp"
 
 namespace elgar {
 
   /**
    * @brief      An AudioSource emits sound from a point in 3D space by reading from a buffer
    */
-  class AudioSource {
+  class AudioSource : public Movable {
   private:
     ALuint m_source;  // The reference to the OpenAL source
 
