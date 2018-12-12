@@ -23,10 +23,11 @@ namespace elgar {
 
   private:
     AudioSystem *m_audio_system;  // Instance of the audio system
+    bool m_running; // Track whether engine is running or not
 
   private:
     Engine(); // Default constructor
-    ~Engine();  // Default destructor
+    virtual ~Engine();  // Default destructor
 
   public:
     /**
@@ -45,6 +46,22 @@ namespace elgar {
      * @return     The singleton instance of the engine, or nullptr if engine not initialized.
      */
     static Engine *GetInstance();
+
+    /**
+     * @brief      Run the application loop
+     *
+     * @param[in]  update        The update function (called every frame)
+     * @param[in]  fixed_update  The fixed update function (called every phys step)
+     * @param[in]  render        The render function (called every frame)
+     */
+    void Run(void (*update)(), void (*fixed_update)(), void (*render)());
+
+    /**
+     * @brief      Checks if the engine is running or not
+     *
+     * @return     True if running, False otherwise.
+     */
+    bool IsRunning() const;
 
   public:
     /**

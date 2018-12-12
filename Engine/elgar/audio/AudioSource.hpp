@@ -39,7 +39,7 @@ namespace elgar {
     /**
      * @brief      Destroys the AudioSource
      */
-    ~AudioSource();
+    virtual ~AudioSource();
 
     /**
      * @brief      Sets the buffer data for the AudioSource
@@ -49,6 +49,53 @@ namespace elgar {
      * @return     True on success, false on error
      */
     bool SetBufferData(const AudioBuffer *buffer);
+
+    /**
+     * @brief      Set the position of the AudioSource
+     *
+     * @param[in]  x     The x Cartesian coordinate
+     * @param[in]  y     The y Cartesian coordinate
+     * @param[in]  z     The z Cartesian coordinate
+     */
+    void SetPosition(float x, float y, float z);
+
+    /**
+     * @brief      Change the position of the AudioSource
+     *
+     * @param[in]  dx    The change in x
+     * @param[in]  dy    The change in y
+     * @param[in]  dz    The change in z
+     */
+    void ChangePosition(float dx, float dy, float dz);
+
+    /**
+     * @brief      Play the AudioSource
+     */
+    void Play();
+
+    /**
+     * @brief      Stop the AudioSource
+     */
+    void Stop();
+
+    /**
+     * @brief      Pause the AudioSource
+     */
+    void Pause();
+
+    /**
+     * @brief      Checks if the AudioSource is playing
+     *
+     * @return     True if playing, False otherwise.
+     */
+    bool IsPlaying();
+
+    /**
+     * @brief      Checks if the AudioSource is paused
+     *
+     * @return     True if paused, False otherwise.
+     */
+    bool IsPaused();
   };
 
 }

@@ -31,7 +31,7 @@ namespace elgar {
 
   private:
     AudioSystem();  // Default constructor
-    ~AudioSystem(); // Default destructor
+    virtual ~AudioSystem(); // Default destructor
 
   public:
     /**
@@ -42,6 +42,13 @@ namespace elgar {
      * @return     True on successful load, false on error
      */
     bool LoadAudioFile(const std::string &filepath);
+
+    /**
+     * @brief      Gets the number of buffers loaded in memory
+     *
+     * @return     The number of loaded buffers
+     */
+    size_t GetBufferCount() const;
 
     /**
      * @brief      Retrieve an audio buffer containing the data for a given audio file

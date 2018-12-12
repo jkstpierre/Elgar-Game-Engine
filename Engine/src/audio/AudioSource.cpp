@@ -36,4 +36,46 @@ namespace elgar {
     return alGetError() == AL_NO_ERROR;
   }
 
+  void AudioSource::SetPosition(float x, float y, float z) {
+    Movable::SetPosition(x, y, z);  // Update the position
+
+    alSource3f(m_source, AL_POSITION, x, y, z);
+  }
+
+  void AudioSource::ChangePosition(float dx, float dy, float dz) {
+    Movable::ChangePosition(dx, dy, dz);
+
+    const glm::vec3 &pos = GetPosition(); // Get the update position
+
+    alSource3f(m_source, AL_POSITION, pos.x, pos.y, pos.z);
+  }
+
+  void AudioSource::Play() {
+    alSourcePlay(m_source);
+  }
+
+  void AudioSource::Stop() {
+    alSourceStop(m_source);
+  }
+
+  void AudioSource::Pause() {
+    alSourcePause(m_source);
+  }
+
+  bool AudioSource::IsPlaying() {
+    ALint status;
+
+    alGetSourcei(m_source, AL_SOURCE_STATE, &status);
+
+    return status == AL_PLAYING;
+  }
+
+  bool AudioSource::IsPaused() {
+    ALint status;
+
+    alGetSourcei(m_source, AL_SOURCE_STATE, &status);
+
+    return status == AL_PAUSED;
+  }
+
 }

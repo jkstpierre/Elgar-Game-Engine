@@ -21,6 +21,42 @@ namespace elgar {
 
 
   public:
+    /**
+     * @brief      Default constructor
+     */
+    AudioListener();
+
+    /**
+     * @brief      Construct an AudioListener at (x,y,z)
+     *
+     * @param[in]  x     The x Cartesian coordinate
+     * @param[in]  y     The y Cartesian coordinate
+     * @param[in]  z     The z Cartesian coordinate
+     */
+    AudioListener(float x, float y, float z);
+
+    /**
+     * @brief      Default destructor
+     */
+    virtual ~AudioListener();
+
+    /**
+     * @brief      Set the position of the AudioListener
+     *
+     * @param[in]  x     The x Cartesian coordinate
+     * @param[in]  y     The y Cartesian coordinate
+     * @param[in]  z     The z Cartesian coordinate
+     */
+    void SetPosition(float x, float y, float z);
+
+    /**
+     * @brief      Change the position of the AudioListener
+     *
+     * @param[in]  dx    The change in the x coordinate
+     * @param[in]  dy    The change in the y coordinate 
+     * @param[in]  dz    The change in the z coordinate
+     */
+    void ChangePosition(float dx, float dy, float dz);
   };
 
 }

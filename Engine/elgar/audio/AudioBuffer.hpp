@@ -25,7 +25,10 @@ namespace elgar {
 
   private:
     AudioBuffer();  // Default constructor
-    ~AudioBuffer(); // Default destructor
+
+    AudioBuffer(const ALuint &handle);  // Construct AudioBuffer from handle
+
+    virtual ~AudioBuffer(); // Default destructor
 
     /**
      * @brief      Fill the buffer with audio data

@@ -38,7 +38,7 @@ namespace elgar {
     /**
      * @brief      Default destructor
      */
-    ~Movable();
+    virtual ~Movable();
 
     /**
      * @brief      Sets the position of the Movable in 3D space

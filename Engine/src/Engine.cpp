@@ -57,6 +57,8 @@ namespace elgar {
     // Initialize the audio subsystem
     m_audio_system = new AudioSystem();
 
+    m_running = false;
+
     // Give status log
     LOG("Elgar online...\n");
   }
@@ -88,6 +90,48 @@ namespace elgar {
 
   Engine *Engine::GetInstance() {
     return m_instance;  // Return handle to the engine instance
+  }
+
+  void Engine::Run(void (*update)(), void (*fixed_update)(), void (*render)()) {
+    // If engine is already running, do nothing
+    if (IsRunning()) 
+      return;
+
+    m_running = true; // Engine is now running
+
+    SDL_Event e;  
+
+    while (m_running) {
+      /* BEGIN APPLICATION LOOP */
+
+      // Poll for events
+      while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+          m_running = false;
+        }
+        else if (e.type == SDL_KEYDOWN) {
+          // Handle key press
+        }
+        else if (e.type == SDL_KEYUP) {
+          // Handle key release
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN) {
+          // Handle mouse click
+        }
+        else if (e.type == SDL_MOUSEBUTTONUP) {
+          // Handle mouse release
+        }
+        else if (e.type == SDL_MOUSEMOTION) {
+          // Handle mouse motion
+        }
+      }
+
+
+    }
+  }
+
+  bool Engine::IsRunning() const {
+    return m_running;
   }
 
   AudioSystem *Engine::GetAudioSystem() {

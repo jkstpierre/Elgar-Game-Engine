@@ -17,6 +17,10 @@ namespace elgar {
     alGenBuffers(1, &m_buffer_data);  // Generate the OpenAL buffer
   }
 
+  AudioBuffer::AudioBuffer(const ALuint &handle) {
+    m_buffer_data = handle; // Copy the handle
+  }
+
   AudioBuffer::~AudioBuffer() {
     alDeleteBuffers(1, &m_buffer_data); // Delete the OpenAL buffer
   }
