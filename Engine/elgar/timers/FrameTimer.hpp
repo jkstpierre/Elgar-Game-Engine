@@ -12,7 +12,7 @@
 namespace elgar {
 
   /**
-   * @brief      The frame timer keeps track of the delta time between frames as well as the current
+   * @brief      The FrameTimer keeps track of the delta time between frames as well as the current
    *             simulation time scale. (Static singleton class)
    */
   class FrameTimer {
@@ -22,10 +22,12 @@ namespace elgar {
     static float m_time_scale;  // Scalar to multiply time by
     static float m_fixed_delta_time;  // Time in seconds between physics steps
     static float m_fixed_time_scale;  // Scalar to multiply fixed time by
+    static float m_alpha; // Interpolated alpha from phys steps
 
   private:
     static void SetDeltaTime(const float &dt); // Record the delta time
     static void SetFixedDeltaTime(const float &fixed_dt);  // Record the fixed delta time
+    static void SetAlpha(const float &alpha); // Set the alpha
 
   public:
     /**
@@ -69,6 +71,13 @@ namespace elgar {
      * @return     The fixed time scale.
      */
     static const float GetFixedTimescale();
+
+    /**
+     * @brief      Get the alpha value for interpolated (smooth) rendering
+     *
+     * @return     The alpha value
+     */
+    static const float GetAlpha();
   };
 
 }

@@ -14,6 +14,7 @@
 #include "elgar/Engine.hpp"
 #include "elgar/core/Exception.hpp"
 #include "elgar/core/Macros.hpp"
+#include "elgar/timers/FrameTimer.hpp"
 
 namespace elgar {
 
@@ -99,7 +100,17 @@ namespace elgar {
 
     m_running = true; // Engine is now running
 
-    SDL_Event e;  
+    // Struct to store event data
+    SDL_Event e;
+
+    /* Frame delta time variables */
+    float delta_time = 1.0f / DEFAULT_PHYS_STEPS_PER_SECOND;
+    
+    // Set the global fixed dt
+    FrameTimer::SetFixedDeltaTime(delta_time);
+
+    float current_time = (float) SDL_GetTicks() / 1000.0f;
+    float accumulator = 0.0f;
 
     while (m_running) {
       /* BEGIN APPLICATION LOOP */
@@ -126,7 +137,32 @@ namespace elgar {
         }
       }
 
+      // Compute the frame time
+      float new_time = (float) SDL_GetTicks() / 1000.0f;
+      float frame_time = new_time - current_time;
+      if (frame_time > 0.25) 
+        frame_time = 0.25;
 
+      current_time = new_time;
+
+      if (update) {
+        FrameTimer::SetDeltaTime(frame_time); // Set the global delta time
+        update(); // Call the supplied user update function
+      }
+
+      if (fixed_update) {
+        accumulator += frame_time;
+
+        while (accumulator >= delta_time) {
+          fixed_update();
+          accumulator -= delta_time;
+        }
+      }
+
+      // Compute interpolated alpha for rendering
+      const float alpha = accumulator / delta_time; 
+
+      FrameTimer::SetAlpha(alpha);  // Update global alpha
     }
   }
 

@@ -13,9 +13,10 @@ namespace elgar {
   // STATIC FIELDS //
 
   float FrameTimer::m_delta_time = 0.0f;  
-  float FrameTimer::m_time_scale = 0.0f;  
+  float FrameTimer::m_time_scale = 1.0f;  
   float FrameTimer::m_fixed_delta_time = 0.0f;  
-  float FrameTimer::m_fixed_time_scale = 0.0f;
+  float FrameTimer::m_fixed_time_scale = 1.0f;
+  float FrameTimer::m_alpha = 0.0f;
 
   // FUNCTIONS //
 
@@ -25,6 +26,10 @@ namespace elgar {
 
   void FrameTimer::SetFixedDeltaTime(const float &fixed_dt) {
     m_fixed_delta_time = fixed_dt;
+  }
+
+  void FrameTimer::SetAlpha(const float &alpha) {
+    m_alpha = alpha;
   }
 
   void FrameTimer::SetTimescale(const float &time_scale) {
@@ -49,5 +54,9 @@ namespace elgar {
 
   const float FrameTimer::GetFixedTimescale() {
     return m_fixed_time_scale;
+  }
+
+  const float FrameTimer::GetAlpha() {
+    return m_alpha;
   }
 }

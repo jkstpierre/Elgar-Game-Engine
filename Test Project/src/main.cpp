@@ -20,24 +20,10 @@ int main() {
   Engine::Init();
 
   Engine *engine = Engine::GetInstance();
-  AudioSystem *audio_system = nullptr;
-
+  
   if (engine) {
-    audio_system = engine->GetAudioSystem();
+    engine->Run(nullptr, nullptr);
   }
-
-  audio_system->LoadAudioFile("Elgar_Cello_Concerto.ogg");
-
-  AudioListener *listener = new AudioListener(0.0f, 0.0f, 0.0f);
-
-  AudioSource *source = new AudioSource(audio_system->GetBufferData("Elgar_Cello_Concerto.ogg"));
-
-  source->Play();
-
-  SDL_Delay(30000);
-
-  delete source;
-  delete listener;
 
   Engine::Shutdown();
 

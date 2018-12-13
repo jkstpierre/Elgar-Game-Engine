@@ -14,7 +14,7 @@
 namespace elgar {
 
   /**
-   * @brief      A base class for objects that have a position
+   * @brief      A Movable is a base class for objects that have a position
    */
   class Movable {
   private:

@@ -11,6 +11,10 @@
 
 #include "elgar/core/AudioSystem.hpp"
 
+// DEFINES //
+
+#define DEFAULT_PHYS_STEPS_PER_SECOND   50  // Number of physics cycles per second
+
 namespace elgar {
 
   /**
@@ -54,7 +58,7 @@ namespace elgar {
      * @param[in]  fixed_update  The fixed update function (called every phys step)
      * @param[in]  render        The render function (called every frame)
      */
-    void Run(void (*update)(), void (*fixed_update)(), void (*render)());
+    void Run(void (*update)(), void (*fixed_update)(), void (*render)() = nullptr);
 
     /**
      * @brief      Checks if the engine is running or not
