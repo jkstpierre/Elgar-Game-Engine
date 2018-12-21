@@ -5,6 +5,7 @@
 */
 
 #include "elgar/Engine.hpp"
+#include "elgar/core/Window.hpp"
 #include "elgar/audio/AudioSource.hpp"
 #include "elgar/audio/AudioListener.hpp"
 
@@ -21,9 +22,7 @@ int main() {
 
   Engine *engine = Engine::GetInstance();
   
-  if (engine) {
-    engine->Run(nullptr, nullptr);
-  }
+  
 
   Engine::Shutdown();
 

@@ -10,6 +10,7 @@
 // INCLUDES //
 
 #include "elgar/core/AudioSystem.hpp"
+#include "elgar/core/Window.hpp"
 
 // DEFINES //
 
@@ -27,6 +28,8 @@ namespace elgar {
 
   private:
     AudioSystem *m_audio_system;  // Instance of the audio system
+    Window *m_window; // Handle to the window context
+
     bool m_running; // Track whether engine is running or not
 
   private:
@@ -74,6 +77,20 @@ namespace elgar {
      * @return     A handle to the audio system
      */
     AudioSystem *GetAudioSystem();
+
+    /**
+     * @brief      Set the window for the Engine
+     *
+     * @param[in]  window  The window instance
+     */
+    void SetWindow(Window *window);
+
+    /**
+     * @brief      Returns the window instance
+     *
+     * @return     The window.
+     */
+    const Window *GetWindow();
   };
 
 }

@@ -60,6 +60,8 @@ namespace elgar {
 
     m_running = false;
 
+    SetWindow(nullptr); // No window by default
+
     // Give status log
     LOG("Elgar online...\n");
   }
@@ -69,6 +71,9 @@ namespace elgar {
 
     if (m_audio_system)
       delete m_audio_system;
+
+    if (m_window)
+      delete m_window;
 
     TTF_Quit(); // Shutdown SDL_ttf
     IMG_Quit(); // Shutdown SDL_image
@@ -172,5 +177,13 @@ namespace elgar {
 
   AudioSystem *Engine::GetAudioSystem() {
     return m_audio_system;  // Return handle to the audio system
+  }
+
+  void Engine::SetWindow(Window *window) {
+    m_window = window;
+  }
+
+  const Window *Engine::GetWindow() {
+    return m_window;
   }
 }
