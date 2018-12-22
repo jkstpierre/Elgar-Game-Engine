@@ -9,6 +9,8 @@
 
 // INCLUDES //
 
+#include <cstdlib>
+
 namespace elgar {
 
   /**

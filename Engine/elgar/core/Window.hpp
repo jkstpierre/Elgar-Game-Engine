@@ -11,11 +11,24 @@
 
 #include <SDL2/SDL.h>
 #include <string>
+#include <glm/glm.hpp>
 
 #include "elgar/core/InstanceCounter.hpp"
-#include "elgar/graphics/Renderer.hpp"
 
 namespace elgar {
+
+  /**
+   * @brief      Enumerations for describing appropriate setup of a Window object
+   */
+  enum WindowFlags {
+    NONE = 0x00,        // No flags
+    FULLSCREEN = 0x01,  // The window starts in fullscreen mode at specified resolution
+    FULLSCREEN_DESKTOP = 0x02,  // The window starts in fullscreen mode at screen resolution
+    BORDERLESS = 0x04,  // The window is borderless
+    MINIMIZED = 0x08,   // The windows starts out minimized
+    MAXIMIZED = 0x10,   // The window starts out maximized
+    RESIZABLE = 0x20    // The window can be scaled
+  };
 
   /**
    * @brief      The Window class handles construction, destruction, and
@@ -25,7 +38,9 @@ namespace elgar {
   friend class Engine;  // Grant engine rights to private members
   private:
     SDL_Window *m_window; // Handle to the SDL2 window context
-    Renderer *m_renderer; // Handle to the elgar rendering context
+    SDL_GLContext m_context;  // Handle to the OpenGL context
+
+    glm::vec2 m_dimensions; // The dimensions of the window
 
   public:
     /**
@@ -34,23 +49,38 @@ namespace elgar {
      * @param[in]  name    The name of the window
      * @param[in]  width   The width (in pixels)
      * @param[in]  height  The height (in pixels)
-     * @param[in]  params  Additional SDL2 parameters
+     * @param[in]  flags   Specific window flags
      */
-    Window(const std::string &name, const int &width, const int &height, const Uint32 &params);
+    Window(const std::string &name, const int &width, const int &height, const unsigned char &flags);
 
     /**
      * @brief      Destroys a Window
      */
     virtual ~Window();
 
+  public:
     /**
-     * @brief      Returns a handle to the rendering context of the Window
+     * @brief      Sets whether or not to use vertical sync (i.e. framerate capped to refresh rate)
      *
-     * @return     The appropriate rendering context
+     * @param[in]  value  The value to set vsync to (true to enable, false to disable)
      */
-    const Renderer *GetRenderingContext() const;
+    void SetVerticalSync(const bool &value) const;
+
+    /**
+     * @brief      Get the screen dimensions
+     *
+     * @return     The dimensions as a 2D vector
+     */
+    glm::vec2 GetDimensions() const;
 
   private:
+    /**
+     * @brief      Initializes OpenGL specs
+     *
+     * @return     True on success, false on failure
+     */
+    bool InitGL();
+
     /**
      * @brief      Draws all renderables to the window
      */

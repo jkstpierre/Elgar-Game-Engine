@@ -9,6 +9,7 @@
 
 // INCLUDES //
 
+#include "elgar/core/InstanceCounter.hpp"
 #include "elgar/core/AudioSystem.hpp"
 #include "elgar/core/Window.hpp"
 
@@ -20,46 +21,33 @@ namespace elgar {
 
   /**
    * @brief      The Engine class oversees all core functionalities of the Elgar pipeline. Every program 
-   *             using Elgar must utilize this class. (Note: Follows the singleton class design pattern)
+   *             using Elgar must utilize this class. (Note: Can only be created once)
    */
-  class Engine {
-  private:
-    static Engine *m_instance; // Instance of the engine class
-
+  class Engine : public InstanceCounter<Engine> {
   private:
     AudioSystem *m_audio_system;  // Instance of the audio system
     Window *m_window; // Handle to the window context
 
     bool m_running; // Track whether engine is running or not
 
-  private:
-    Engine(); // Default constructor
-    virtual ~Engine();  // Default destructor
-
   public:
     /**
-     * @brief      Initializes Elgar and its subsystems and creates an instance of the engine
+     * @brief      Create a new instance of Elgar
      */
-    static void Init();
+    Engine();
 
     /**
-     * @brief      Shuts down Elgar and its subsystems and destroys the engine instance
+     * @brief      Destroys this instance of Elgar
      */
-    static void Shutdown();
+    virtual ~Engine();
 
-    /**
-     * @brief      Returns the Elgar Engine instance
-     *
-     * @return     The singleton instance of the engine, or nullptr if engine not initialized.
-     */
-    static Engine *GetInstance();
-
+  public:
     /**
      * @brief      Run the application loop
      *
      * @param[in]  update        The update function (called every frame)
      * @param[in]  fixed_update  The fixed update function (called every phys step)
-     * @param[in]  render        The render function (called every frame)
+     * @param[in]  render        The render function (called every frame) (completely optional)
      */
     void Run(void (*update)(), void (*fixed_update)(), void (*render)() = nullptr);
 
@@ -69,6 +57,13 @@ namespace elgar {
      * @return     True if running, False otherwise.
      */
     bool IsRunning() const;
+
+    /**
+     * @brief      Sets whether or not the application loop is running
+     *
+     * @param[in]  running  The value to see running to
+     */
+    void SetRunning(const bool &running);
 
   public:
     /**

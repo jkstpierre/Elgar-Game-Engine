@@ -5,7 +5,6 @@
 */
 
 #include "elgar/Engine.hpp"
-#include "elgar/core/Window.hpp"
 #include "elgar/audio/AudioSource.hpp"
 #include "elgar/audio/AudioListener.hpp"
 
@@ -18,13 +17,16 @@
 using namespace elgar;
 
 int main() {
-  Engine::Init();
+  // Create new instance of Elgar
+  Engine *engine = new Engine();
 
-  Engine *engine = Engine::GetInstance();
-  
-  
+  // Give elgar a window to manage
+  engine->SetWindow(new Window("Hello World", 800, 600, FULLSCREEN));
 
-  Engine::Shutdown();
+  SDL_Delay(1000);
+
+  // Unload resources from RAM
+  delete engine;
 
   return 0;
 }

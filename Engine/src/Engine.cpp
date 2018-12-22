@@ -9,22 +9,25 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <AL/al.h>
 
 #include "elgar/Engine.hpp"
 #include "elgar/core/Exception.hpp"
+#include "elgar/core/IO.hpp"
 #include "elgar/core/Macros.hpp"
 #include "elgar/timers/FrameTimer.hpp"
 
 namespace elgar {
 
-  // STATIC FIELDS //
-
-  Engine *Engine::m_instance = nullptr; // No engine instance at program start
-  
   // FUNCTIONS //
 
   Engine::Engine() {
+    // Check to make sure engine is only instantiated once
+    if (InstanceCounter<Engine>::GetCount() > 1) {
+      InstanceCounter<Engine>::SetCount(1);
+
+      throw Exception("ERROR: Elgar has already been initialized!");
+    }
+
     // Initialize subsystems
 
     int code = 0; // A response code to check for errors with
@@ -58,7 +61,7 @@ namespace elgar {
     // Initialize the audio subsystem
     m_audio_system = new AudioSystem();
 
-    m_running = false;
+    SetRunning(false);  // Engine is not running by default
 
     SetWindow(nullptr); // No window by default
 
@@ -82,28 +85,12 @@ namespace elgar {
     LOG("Elgar offline...\n");
   }
 
-  void Engine::Init() {
-    if (!m_instance)
-      m_instance = new Engine();  // Create an engine instance if one does not yet exist
-  }
-
-  void Engine::Shutdown() {
-    if (m_instance)
-      delete m_instance;  // Destroy the engine if it exists
-
-    m_instance = nullptr;
-  }
-
-  Engine *Engine::GetInstance() {
-    return m_instance;  // Return handle to the engine instance
-  }
-
   void Engine::Run(void (*update)(), void (*fixed_update)(), void (*render)()) {
     // If engine is already running, do nothing
     if (IsRunning()) 
       return;
 
-    m_running = true; // Engine is now running
+    SetRunning(true); // Engine is now running
 
     // Struct to store event data
     SDL_Event e;
@@ -123,19 +110,37 @@ namespace elgar {
       // Poll for events
       while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-          m_running = false;
+          SetRunning(false);
         }
         else if (e.type == SDL_KEYDOWN) {
           // Handle key press
+
+          Keyboard::PressKey(e.key.keysym.sym);
         }
         else if (e.type == SDL_KEYUP) {
           // Handle key release
+
+          Keyboard::ReleaseKey(e.key.keysym.sym);
         }
         else if (e.type == SDL_MOUSEBUTTONDOWN) {
           // Handle mouse click
+
+          if (e.button.button == SDL_BUTTON_LEFT) {
+            Mouse::PressButton(LEFT); // Handle left click
+          }
+          else if (e.button.button == SDL_BUTTON_RIGHT) {
+            Mouse::PressButton(RIGHT);  // Handle right click
+          }
         }
         else if (e.type == SDL_MOUSEBUTTONUP) {
           // Handle mouse release
+
+          if (e.button.button == SDL_BUTTON_LEFT) {
+            Mouse::ReleaseButton(LEFT); // Handle left release 
+          }
+          else if (e.button.button == SDL_BUTTON_RIGHT) {
+            Mouse::ReleaseButton(RIGHT);  // Handle right release
+          }
         }
         else if (e.type == SDL_MOUSEMOTION) {
           // Handle mouse motion
@@ -155,6 +160,7 @@ namespace elgar {
         update(); // Call the supplied user update function
       }
 
+      // Handle phys steps
       if (fixed_update) {
         accumulator += frame_time;
 
@@ -173,6 +179,10 @@ namespace elgar {
 
   bool Engine::IsRunning() const {
     return m_running;
+  }
+
+  void Engine::SetRunning(const bool &running) {
+    m_running = running;
   }
 
   AudioSystem *Engine::GetAudioSystem() {
