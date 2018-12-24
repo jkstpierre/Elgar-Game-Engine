@@ -16,12 +16,12 @@ namespace elgar {
 
   // FUNCTIONS //
 
-  Window::Window(const std::string &name, const int &width, const int &height, const unsigned char &flags) {
-    if (InstanceCounter<Window>::GetCount() > 1) {
-      InstanceCounter<Window>::SetCount(1);
-
-      throw Exception("ERROR: Window instance already exists!");
-    }
+  Window::Window(
+    const std::string &name, 
+    const int &width, 
+    const int &height, 
+    const unsigned char &flags
+  ) : Singleton<Window>(this) {
 
     Uint32 params = 0;  // SDL2 window params
 
@@ -49,8 +49,14 @@ namespace elgar {
     // Set OpenGL Context flags
 
     // Set major and minor versions and request core profile
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(
+      SDL_GL_CONTEXT_MAJOR_VERSION,
+      DEFAULT_GL_MAJOR_VERSION
+    );
+    SDL_GL_SetAttribute(
+      SDL_GL_CONTEXT_MINOR_VERSION, 
+      DEFAULT_GL_MINOR_VERSION
+    );
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     // Enable 4x Anti-Aliasing
@@ -62,19 +68,19 @@ namespace elgar {
 
     // Forward compatibility with macs
     #ifdef __APPLE__
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
     #endif
 
     m_dimensions = glm::vec2(width, height);  // Store the screen dimensions
 
     m_window = SDL_CreateWindow(
-                name.c_str(), // The name of the window
-                SDL_WINDOWPOS_CENTERED, // Center the window on the screen
-                SDL_WINDOWPOS_CENTERED, // Center the window on the screen
-                width,  // The width of the window (in pixels)
-                height, // The height of the window (in pixels)
-                params | SDL_WINDOW_OPENGL // The SDL2 window params
-              );
+      name.c_str(), // The name of the window
+      SDL_WINDOWPOS_CENTERED, // Center the window on the screen
+      SDL_WINDOWPOS_CENTERED, // Center the window on the screen
+      width,  // The width of the window (in pixels)
+      height, // The height of the window (in pixels)
+      params | SDL_WINDOW_OPENGL // The SDL2 window params
+    );
 
     if (!m_window) {
       throw Exception("ERROR: Failed to create window! SDL_Error: " + std::string(SDL_GetError()));
@@ -107,12 +113,16 @@ namespace elgar {
     LOG("Window destroyed!\n");
   }
 
-  void Window::Present() {
+  void Window::Present(void (*render)()) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /*
      *  Draw things in here
      */
+
+    // Call rendering function if possible
+    if (render)
+      render();
 
     SDL_GL_SwapWindow(m_window);
   }
@@ -201,4 +211,5 @@ namespace elgar {
   glm::vec2 Window::GetDimensions() const {
     return m_dimensions;
   }
+
 }

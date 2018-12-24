@@ -21,25 +21,6 @@ namespace elgar {
   private:
     static size_t m_count;  // Number of objects in memory
 
-  protected:
-    /**
-     * @brief      Set the number of objects
-     *
-     * @param[in]  count  The number of objects
-     */
-    static void SetCount(const size_t &count) {
-      m_count = count;
-    }
-
-    /**
-     * @brief      Changes the count by delta
-     *
-     * @param[in]  delta  The delta
-     */
-    static void AddCount(const size_t &delta) {
-      m_count += delta;
-    }
-
   public:
     /**
      * @brief      Constructs an InstanceCounter

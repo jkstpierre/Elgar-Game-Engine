@@ -19,7 +19,7 @@ namespace elgar {
 
   // FUNCTIONS //
 
-  AudioSystem::AudioSystem() {
+  AudioSystem::AudioSystem() : Singleton<AudioSystem>(this) {
     // Open the default audio device
     m_device = alcOpenDevice(NULL);
 
@@ -224,4 +224,5 @@ namespace elgar {
     // Return the buffer
     return buffer;
   }
+
 }

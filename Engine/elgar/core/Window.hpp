@@ -13,7 +13,12 @@
 #include <string>
 #include <glm/glm.hpp>
 
-#include "elgar/core/InstanceCounter.hpp"
+#include "elgar/core/Singleton.hpp"
+
+// DEFINES //
+
+#define DEFAULT_GL_MAJOR_VERSION        4   // Use OpenGL 4.x
+#define DEFAULT_GL_MINOR_VERSION        2   // Use OpenGL x.2
 
 namespace elgar {
 
@@ -32,9 +37,9 @@ namespace elgar {
 
   /**
    * @brief      The Window class handles construction, destruction, and
-   *             management of SDL2 windows. Only one Window can exist at a time
+   *             management of SDL2 windows. (Is a Singleton class)
    */
-  class Window : public InstanceCounter<Window> {
+  class Window : public Singleton<Window> {
   friend class Engine;  // Grant engine rights to private members
   private:
     SDL_Window *m_window; // Handle to the SDL2 window context
@@ -42,7 +47,7 @@ namespace elgar {
 
     glm::vec2 m_dimensions; // The dimensions of the window
 
-  public:
+  private:
     /**
      * @brief      Constructs a new Window
      *
@@ -52,7 +57,7 @@ namespace elgar {
      * @param[in]  flags   Specific window flags
      */
     Window(const std::string &name, const int &width, const int &height, const unsigned char &flags);
-
+  
     /**
      * @brief      Destroys a Window
      */
@@ -82,9 +87,9 @@ namespace elgar {
     bool InitGL();
 
     /**
-     * @brief      Draws all renderables to the window
+     * @brief      Draws all renderables to the window as well as calls optional rendering function
      */
-    void Present();
+    void Present(void (*render)());
 
   };
 

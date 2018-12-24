@@ -14,20 +14,23 @@
 #include "elgar/core/Exception.hpp"
 #include "elgar/core/IO.hpp"
 #include "elgar/core/Macros.hpp"
+#include "elgar/core/AudioSystem.hpp"
+#include "elgar/core/Window.hpp"
+
 #include "elgar/timers/FrameTimer.hpp"
+
+#include "elgar/graphics/TextureManager.hpp"
 
 namespace elgar {
 
   // FUNCTIONS //
 
-  Engine::Engine() {
-    // Check to make sure engine is only instantiated once
-    if (InstanceCounter<Engine>::GetCount() > 1) {
-      InstanceCounter<Engine>::SetCount(1);
-
-      throw Exception("ERROR: Elgar has already been initialized!");
-    }
-
+  Engine::Engine(
+      const std::string &window_name, 
+      const int &window_width, 
+      const int &window_height, 
+      const unsigned char &window_flags
+  ) : Singleton<Engine>(this) {
     // Initialize subsystems
 
     int code = 0; // A response code to check for errors with
@@ -58,12 +61,16 @@ namespace elgar {
 
     // Initialize elgar subsystems
 
+    // Initialize the window
+    Window::SetInstance(new Window(window_name, window_width, window_height, window_flags));
+
     // Initialize the audio subsystem
-    m_audio_system = new AudioSystem();
+    AudioSystem::SetInstance(new AudioSystem());
+
+    // Initialize the texture manager
+    TextureManager::SetInstance(new TextureManager());
 
     SetRunning(false);  // Engine is not running by default
-
-    SetWindow(nullptr); // No window by default
 
     // Give status log
     LOG("Elgar online...\n");
@@ -72,11 +79,20 @@ namespace elgar {
   Engine::~Engine() {
     // Terminate subsystems
 
-    if (m_audio_system)
-      delete m_audio_system;
+    // Destroy the audio system
+    if (AudioSystem::GetInstance()) {
+      delete AudioSystem::GetInstance();
+    }
 
-    if (m_window)
-      delete m_window;
+    // Destroy the TextureManager instance
+    if (TextureManager::GetInstance()) {
+      delete TextureManager::GetInstance();
+    }
+
+    // Destroy the Window instance
+    if (Window::GetInstance()) {
+      delete Window::GetInstance();
+    }
 
     TTF_Quit(); // Shutdown SDL_ttf
     IMG_Quit(); // Shutdown SDL_image
@@ -144,6 +160,7 @@ namespace elgar {
         }
         else if (e.type == SDL_MOUSEMOTION) {
           // Handle mouse motion
+          Mouse::SetPosition({e.motion.x, e.motion.y});
         }
       }
 
@@ -174,6 +191,10 @@ namespace elgar {
       const float alpha = accumulator / delta_time; 
 
       FrameTimer::SetAlpha(alpha);  // Update global alpha
+
+      // Draw the window contents
+      if (Window::GetInstance())
+        Window::GetInstance()->Present(render);
     }
   }
 
@@ -185,15 +206,4 @@ namespace elgar {
     m_running = running;
   }
 
-  AudioSystem *Engine::GetAudioSystem() {
-    return m_audio_system;  // Return handle to the audio system
-  }
-
-  void Engine::SetWindow(Window *window) {
-    m_window = window;
-  }
-
-  const Window *Engine::GetWindow() {
-    return m_window;
-  }
 }

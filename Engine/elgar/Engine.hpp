@@ -9,9 +9,8 @@
 
 // INCLUDES //
 
-#include "elgar/core/InstanceCounter.hpp"
-#include "elgar/core/AudioSystem.hpp"
-#include "elgar/core/Window.hpp"
+#include "elgar/core/Singleton.hpp"
+#include <string>
 
 // DEFINES //
 
@@ -21,20 +20,27 @@ namespace elgar {
 
   /**
    * @brief      The Engine class oversees all core functionalities of the Elgar pipeline. Every program 
-   *             using Elgar must utilize this class. (Note: Can only be created once)
+   *             using Elgar must utilize this class. (Is a Singleton class)
    */
-  class Engine : public InstanceCounter<Engine> {
+  class Engine : public Singleton<Engine> {
   private:
-    AudioSystem *m_audio_system;  // Instance of the audio system
-    Window *m_window; // Handle to the window context
-
     bool m_running; // Track whether engine is running or not
 
   public:
     /**
-     * @brief      Create a new instance of Elgar
+     * @brief      Initialize a new instance of Elgar
+     *
+     * @param[in]  window_name    The name of the window
+     * @param[in]  window_width   The window width (in pixels)
+     * @param[in]  window_height  The window height (in pixels)
+     * @param[in]  window_flags   The window flags (window enumeration flags)
      */
-    Engine();
+    Engine(
+      const std::string &window_name, 
+      const int &window_width, 
+      const int &window_height, 
+      const unsigned char &window_flags
+    );
 
     /**
      * @brief      Destroys this instance of Elgar
@@ -65,27 +71,6 @@ namespace elgar {
      */
     void SetRunning(const bool &running);
 
-  public:
-    /**
-     * @brief      Gets a handle to the audio system
-     *
-     * @return     A handle to the audio system
-     */
-    AudioSystem *GetAudioSystem();
-
-    /**
-     * @brief      Set the window for the Engine
-     *
-     * @param[in]  window  The window instance
-     */
-    void SetWindow(Window *window);
-
-    /**
-     * @brief      Returns the window instance
-     *
-     * @return     The window.
-     */
-    const Window *GetWindow();
   };
 
 }

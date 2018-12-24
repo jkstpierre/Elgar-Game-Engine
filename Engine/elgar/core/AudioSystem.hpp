@@ -15,13 +15,15 @@
 #include <unordered_map>
 
 #include "elgar/audio/AudioBuffer.hpp"
+#include "elgar/core/Singleton.hpp"
 
 namespace elgar {
 
   /**
    * @brief      The AudioSystem class manages and stores all sound and music for Elgar.
+   *             (Is a Singleton class)
    */
-  class AudioSystem {
+  class AudioSystem : public Singleton<AudioSystem> {
   friend class Engine;  // Grant the Engine exclusive instantiation rights
   private:
     ALCdevice *m_device;    // Handle to the audio device
