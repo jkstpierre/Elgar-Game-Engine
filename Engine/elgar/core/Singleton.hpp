@@ -65,7 +65,7 @@ namespace elgar {
 
   };
 
-  // STATIC FIELD //
+  // STATIC FIELDS //
 
   template<typename T> T *Singleton<T>::m_instance = nullptr;  // Uninitialized to begin with
 

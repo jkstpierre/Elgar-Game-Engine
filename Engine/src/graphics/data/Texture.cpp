@@ -6,7 +6,7 @@
 
 // INCLUDES //
 
-#include "elgar/graphics/Texture.hpp"
+#include "elgar/graphics/data/Texture.hpp"
 
 namespace elgar {
 
@@ -33,11 +33,13 @@ namespace elgar {
     glDeleteTextures(1, &m_id); // Delete the texture
   }
 
-  void Texture::Bind() const {
+  void Texture::Bind(const GLuint &index) const {
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, m_id);
   }
 
-  void Texture::Unbind() const {
+  void Texture::Unbind(const GLuint &index) const {
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
 }

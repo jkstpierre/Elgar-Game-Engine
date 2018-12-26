@@ -4,6 +4,20 @@
   Year: 2018
 */
 
+/*! \mainpage
+ *
+ * \section intro_sec Introduction
+ *
+ * Welcome to Elgar3D's documentation page. This site should serve as a reference manual for any
+ * would be developers seeking to build games using Elgar3D.
+ *
+ * \section install_sec Installation
+ *
+ * \subsection step1 Step 1: Installing dependencies
+ *
+ * etc...
+ */
+
 #ifndef _ELGAR_GAME_ENGINE_HPP_
 #define _ELGAR_GAME_ENGINE_HPP_
 

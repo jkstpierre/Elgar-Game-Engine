@@ -16,7 +16,7 @@
 #include "elgar/audio/aux/stb_vorbis.h"
 
 namespace elgar {
-
+  
   // FUNCTIONS //
 
   AudioSystem::AudioSystem() : Singleton<AudioSystem>(this) {

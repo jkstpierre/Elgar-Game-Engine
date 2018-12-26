@@ -20,6 +20,7 @@
 #include "elgar/timers/FrameTimer.hpp"
 
 #include "elgar/graphics/TextureManager.hpp"
+#include "elgar/graphics/ShaderManager.hpp"
 
 namespace elgar {
 
@@ -70,6 +71,9 @@ namespace elgar {
     // Initialize the texture manager
     TextureManager::SetInstance(new TextureManager());
 
+    // Initialize the shader manager
+    ShaderManager::SetInstance(new ShaderManager());
+
     SetRunning(false);  // Engine is not running by default
 
     // Give status log
@@ -87,6 +91,11 @@ namespace elgar {
     // Destroy the TextureManager instance
     if (TextureManager::GetInstance()) {
       delete TextureManager::GetInstance();
+    }
+
+    // Destroy the ShaderManager instance
+    if (ShaderManager::GetInstance()) {
+      delete ShaderManager::GetInstance();
     }
 
     // Destroy the Window instance

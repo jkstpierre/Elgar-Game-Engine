@@ -22,10 +22,7 @@ namespace elgar {
     virtual ~Renderer();
 
   protected:
-    /**
-     * @brief      Present the contents of the renderer to the screen
-     */
-    virtual void Present() = 0;
+    
   };
 
 }

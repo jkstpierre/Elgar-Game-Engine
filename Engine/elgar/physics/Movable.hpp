@@ -33,12 +33,26 @@ namespace elgar {
      * @param[in]  y     The y Cartesian coordinate
      * @param[in]  z     The z Cartesian coordinate
      */
-    Movable(float x, float y, float z);
+    Movable(const float &x, const float &y, const float &z);
+
+    /**
+     * @brief Construct a new Movable object from a glm::vec3
+     * 
+     * @param position    The xyz coordinates of the Movable
+     */
+    Movable(const glm::vec3 &position);
 
     /**
      * @brief      Default destructor
      */
     virtual ~Movable();
+
+    /**
+     * @brief Set the Position of the Movable
+     * 
+     * @param position  The position of the Movable
+     */
+    void SetPosition(const glm::vec3 &position);
 
     /**
      * @brief      Sets the position of the Movable in 3D space
@@ -47,7 +61,14 @@ namespace elgar {
      * @param[in]  y     The y Cartesian coordinate
      * @param[in]  z     The z Cartesian coordinate
      */
-    void SetPosition(float x, float y, float z);
+    void SetPosition(const float &x, const float &y, const float &z);
+
+    /**
+     * @brief Change the position of the Movable by a delta vector
+     * 
+     * @param delta_position  The change in the position of the movable
+     */
+    void ChangePosition(const glm::vec3 &delta_position);
 
     /**
      * @brief      Change the position of the Movable in 3D space by a delta
@@ -56,17 +77,7 @@ namespace elgar {
      * @param[in]  dy    The change in the y Cartesian coordinate
      * @param[in]  dz    The change in the z Cartesian coordinate
      */
-    void ChangePosition(float dx, float dy, float dz);
-
-    /**
-     * @brief      Change the position of the Movable in 3D space by a delta and delta time
-     *
-     * @param[in]  dx    The change in the x Cartesian coordinate
-     * @param[in]  dy    The change in the y Cartesian coordinate
-     * @param[in]  dz    The change in the z Cartesian coordinate
-     * @param[in]  dt    The delta time to scale by
-     */
-    void ChangePosition(float dx, float dy, float dz, float dt);
+    void ChangePosition(const float &dx, const float &dy, const float &dz);
 
     /**
      * @brief      Get the position of the Movable

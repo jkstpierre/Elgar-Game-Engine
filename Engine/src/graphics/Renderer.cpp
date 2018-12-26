@@ -14,11 +14,11 @@ namespace elgar {
   // FUNCTIONS //
 
   Renderer::Renderer() {
-    LOG("Rendering context created!\n");
+    LOG("Renderer created!\n");
   }
 
   Renderer::~Renderer() {
-    LOG("Rendering context destroyed!\n");
+    LOG("Renderer destroyed!\n");
   }
 
 }

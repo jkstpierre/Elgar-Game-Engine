@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "elgar/graphics/Texture.hpp"
+#include "elgar/graphics/data/Texture.hpp"
 #include "elgar/core/Singleton.hpp"
 
 namespace elgar {

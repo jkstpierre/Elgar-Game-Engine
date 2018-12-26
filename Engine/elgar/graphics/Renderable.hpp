@@ -12,8 +12,8 @@
 namespace elgar {
 
   /**
-   * @brief      A Renderable is an abstract base class for encapsulating relevant functionality for all
-   *             objects that get displayed by a Renderer.
+   * @brief      A Renderable is an abstract base class for encapsulating relevant functionality for 
+   *             all objects that get displayed by a Renderer.
    */
   class Renderable {
   private:

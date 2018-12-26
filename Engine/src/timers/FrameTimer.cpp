@@ -40,23 +40,23 @@ namespace elgar {
     m_fixed_time_scale = fixed_time_scale;
   }
 
-  const float FrameTimer::GetDeltaTime() {
+  float FrameTimer::GetDeltaTime() {
     return m_delta_time * m_time_scale;
   }
 
-  const float FrameTimer::GetFixedDeltaTime() {
+  float FrameTimer::GetFixedDeltaTime() {
     return m_fixed_delta_time * m_fixed_time_scale;
   }
 
-  const float FrameTimer::GetTimescale() {
+  float FrameTimer::GetTimescale() {
     return m_time_scale;
   }
 
-  const float FrameTimer::GetFixedTimescale() {
+  float FrameTimer::GetFixedTimescale() {
     return m_fixed_time_scale;
   }
 
-  const float FrameTimer::GetAlpha() {
+  float FrameTimer::GetAlpha() {
     return m_alpha;
   }
 }

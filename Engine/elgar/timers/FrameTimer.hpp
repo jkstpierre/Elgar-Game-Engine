@@ -49,35 +49,35 @@ namespace elgar {
      *
      * @return     The delta time.
      */
-    static const float GetDeltaTime();
+    static float GetDeltaTime();
 
     /**
      * @brief      Get the fixed delta time elapsed since last frame
      *
      * @return     The fixed delta time.
      */
-    static const float GetFixedDeltaTime();
+    static float GetFixedDeltaTime();
 
     /**
      * @brief      Get the time scale
      *
      * @return     The time scale.
      */
-    static const float GetTimescale();
+    static float GetTimescale();
 
     /**
      * @brief      Get the fixed time scale
      *
      * @return     The fixed time scale.
      */
-    static const float GetFixedTimescale();
+    static float GetFixedTimescale();
 
     /**
      * @brief      Get the alpha value for interpolated (smooth) rendering
      *
      * @return     The alpha value
      */
-    static const float GetAlpha();
+    static float GetAlpha();
   };
 
 }

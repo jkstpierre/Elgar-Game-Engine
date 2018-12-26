@@ -38,14 +38,18 @@ namespace elgar {
 
   public:
     /**
-     * @brief      Bind the texture for rendering
+     * @brief Bind the texture to an index for rendering
+     * 
+     * @param index The index to bind to (default is 0)
      */
-    void Bind() const;
+    void Bind(const GLuint &index = 0) const;
 
     /**
-     * @brief      Unbind the texture
+     * @brief Unbind the texture from an index for rendering
+     * 
+     * @param index The index to unbind (default is 0)
      */
-    void Unbind() const;
+    void Unbind(const GLuint &index = 0) const;
   };
 }
 
