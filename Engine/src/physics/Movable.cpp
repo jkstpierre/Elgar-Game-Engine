@@ -13,11 +13,7 @@ namespace elgar {
   // FUNCTIONS //
 
   Movable::Movable() {
-    SetPosition(0.0f, 0.0f, 0.0f);
-  }
-
-  Movable::Movable(const float &x, const float &y, const float &z) {
-    SetPosition(x, y, z);
+    SetPosition({0.0f, 0.0f, 0.0f});
   }
 
   Movable::Movable(const glm::vec3 &position) {
@@ -32,16 +28,8 @@ namespace elgar {
     m_position = position;
   }
 
-  void Movable::SetPosition(const float &x, const float &y, const float &z) {
-    SetPosition({x, y, z});
-  }
-
-  void Movable::ChangePosition(const glm::vec3 &delta_position) {
-    m_position += delta_position;
-  }
-
-  void Movable::ChangePosition(const float &dx, const float &dy, const float &dz) {
-    ChangePosition({dx, dy, dz});
+  void Movable::ChangePosition(const glm::vec3 &delta) {
+    m_position += delta;
   }
 
   const glm::vec3 &Movable::GetPosition() const {

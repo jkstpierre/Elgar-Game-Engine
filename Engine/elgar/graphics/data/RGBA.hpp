@@ -10,6 +10,7 @@
 // INCLUDES //
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 namespace elgar {
 
@@ -75,6 +76,20 @@ namespace elgar {
     const GLubyte &GetAlphaChannel() const;
 
     /**
+     * @brief Get the RGBA data as a 32-bit unsigned integer
+     * 
+     * @return 32-bit data
+     */
+    GLuint GetPackedData() const;
+
+    /**
+     * @brief Get the data as a 4 dimensional vector
+     * 
+     * @return Vec4 data
+     */
+    glm::vec4 GetData() const;
+
+    /**
      * @brief Set this color object equal to another
      * 
      * @param color The color to equal
@@ -85,26 +100,29 @@ namespace elgar {
     /**
      * @brief Add one color to another color to make a new color
      * 
-     * @param color The color to add
-     * @return An updated reference to the RGBA object
+     * @param c1 The first color
+     * @param c2 The second color
+     * @return A new color containing the sum of c1 and c2
      */
-    RGBA &operator +(const RGBA &color);
+    friend RGBA operator +(const RGBA &c1, const RGBA &c2);
 
     /**
      * @brief Subtract one color from another color to make a new color
      * 
-     * @param color The color to subtract by
-     * @return An updated reference to the RGBA object
+     * @param c1 The color to subtract from
+     * @param c2 The color to subtract by
+     * @return A new color containing the result of c1 - c2
      */
-    RGBA &operator -(const RGBA &color);
+    friend RGBA operator -(const RGBA &c1, const RGBA &c2);
  
     /**
      * @brief Multiply one color by another color to make a new color
      * 
-     * @param color The color to multiply by
-     * @return An updated reference to the RGBA object
+     * @param c1 The first color to multiply with
+     * @param c2 The second color to multiply by
+     * @return A new color containing the result of c1 * c2
      */
-    RGBA &operator *(const RGBA &color);
+    friend RGBA operator *(const RGBA &c1, const RGBA &c2);
 
     /**
      * @brief Add another color to this color

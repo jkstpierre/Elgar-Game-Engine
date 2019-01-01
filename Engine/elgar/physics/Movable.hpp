@@ -27,15 +27,6 @@ namespace elgar {
     Movable();
 
     /**
-     * @brief      Constructs a Movable at (x, y, z) in 3D space
-     *
-     * @param[in]  x     The x Cartesian coordinate
-     * @param[in]  y     The y Cartesian coordinate
-     * @param[in]  z     The z Cartesian coordinate
-     */
-    Movable(const float &x, const float &y, const float &z);
-
-    /**
      * @brief Construct a new Movable object from a glm::vec3
      * 
      * @param position    The xyz coordinates of the Movable
@@ -55,29 +46,11 @@ namespace elgar {
     void SetPosition(const glm::vec3 &position);
 
     /**
-     * @brief      Sets the position of the Movable in 3D space
-     *
-     * @param[in]  x     The x Cartesian coordinate
-     * @param[in]  y     The y Cartesian coordinate
-     * @param[in]  z     The z Cartesian coordinate
-     */
-    void SetPosition(const float &x, const float &y, const float &z);
-
-    /**
      * @brief Change the position of the Movable by a delta vector
      * 
      * @param delta_position  The change in the position of the movable
      */
-    void ChangePosition(const glm::vec3 &delta_position);
-
-    /**
-     * @brief      Change the position of the Movable in 3D space by a delta
-     *
-     * @param[in]  dx    The change in the x Cartesian coordinate
-     * @param[in]  dy    The change in the y Cartesian coordinate
-     * @param[in]  dz    The change in the z Cartesian coordinate
-     */
-    void ChangePosition(const float &dx, const float &dy, const float &dz);
+    void ChangePosition(const glm::vec3 &delta);
 
     /**
      * @brief      Get the position of the Movable

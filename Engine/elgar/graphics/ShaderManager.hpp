@@ -12,6 +12,10 @@
 #include "elgar/core/Singleton.hpp"
 #include "elgar/graphics/Shader.hpp"
 
+// DEFINES //
+
+#define BASIC_SHADER_PROGRAM    "Basic"   // Name of the default basic shader
+
 namespace elgar {
 
   /**

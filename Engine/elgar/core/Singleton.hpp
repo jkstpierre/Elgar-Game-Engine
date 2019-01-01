@@ -17,7 +17,7 @@ namespace elgar {
    * @brief      The Singleton class is a simple base class for objects that can only be
    *             instantiated once.
    *
-   * @tparam     T     { description }
+   * @tparam     T     Templated argument to make a singleton
    */
   template<typename T>
   class Singleton {
@@ -51,16 +51,6 @@ namespace elgar {
      */
     static T *GetInstance() {
       return m_instance;
-    };
-
-    /**
-     * @brief      Sets the Singleton instance
-     *
-     * @param      instance  The instance to set
-     */
-    static void SetInstance(T *instance) {
-      if (!m_instance)
-        m_instance = instance;
     };
 
   };

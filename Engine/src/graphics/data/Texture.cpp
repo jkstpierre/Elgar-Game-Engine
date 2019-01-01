@@ -27,6 +27,10 @@ namespace elgar {
 
     // Create Mipmap for the texture
     glGenerateMipmap(GL_TEXTURE_2D);
+
+    // Copy the width and height
+    m_width = width;
+    m_height = height;
   }
 
   Texture::~Texture() {
@@ -42,4 +46,21 @@ namespace elgar {
     glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
+
+  bool Texture::operator ==(const Texture &texture) const {
+    return m_id == texture.m_id;
+  }
+
+  bool Texture::operator !=(const Texture &texture) const {
+    return m_id != texture.m_id;
+  }
+
+  const GLsizei &Texture::GetWidth() const {
+    return m_width;
+  }
+
+  const GLsizei &Texture::GetHeight() const {
+    return m_height;
+  }
+
 }

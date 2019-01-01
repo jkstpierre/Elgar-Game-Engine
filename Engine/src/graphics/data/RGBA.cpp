@@ -39,6 +39,17 @@ namespace elgar {
     return m_alpha;
   }
 
+  GLuint RGBA::GetPackedData() const {
+    return  ((GLuint) m_alpha) << 24 |
+            ((GLuint) m_blue) << 16 |
+            ((GLuint) m_green) << 8 |
+            ((GLuint) m_red);
+  }
+
+  glm::vec4 RGBA::GetData() const {
+    return {m_red, m_green, m_blue, m_alpha};
+  }
+
   RGBA &RGBA::operator =(const RGBA &color) {
     this->m_red = color.m_red;
     this->m_green = color.m_green;
@@ -48,7 +59,28 @@ namespace elgar {
     return *this;
   }
 
-  RGBA &RGBA::operator +(const RGBA &color) {
+  RGBA operator +(const RGBA &c1, const RGBA &c2) {
+    return RGBA(c1.m_red + c2.m_red, 
+                c1.m_green + c2.m_green,
+                c1.m_blue + c2.m_blue,
+                c1.m_alpha + c2.m_alpha);
+  }
+
+  RGBA operator -(const RGBA &c1, const RGBA &c2) {
+    return RGBA(c1.m_red - c2.m_red,
+                c1.m_green - c2.m_green,
+                c1.m_blue - c2.m_blue,
+                c1.m_alpha - c2.m_alpha);
+  }
+
+  RGBA operator *(const RGBA &c1, const RGBA &c2) {
+    return RGBA(c1.m_red * c2.m_red,
+                c1.m_green * c2.m_green,
+                c1.m_blue * c2.m_blue,
+                c1.m_alpha * c2.m_alpha);
+  }
+
+  RGBA &RGBA::operator +=(const RGBA &color) {
     this->m_red += color.m_red;
     this->m_green += color.m_green;
     this->m_blue += color.m_blue;
@@ -57,7 +89,7 @@ namespace elgar {
     return *this;
   }
 
-  RGBA &RGBA::operator -(const RGBA &color) {
+  RGBA &RGBA::operator -=(const RGBA &color) {
     this->m_red -= color.m_red;
     this->m_green -= color.m_green;
     this->m_blue -= color.m_blue;
@@ -66,25 +98,13 @@ namespace elgar {
     return *this;
   }
 
-  RGBA &RGBA::operator *(const RGBA &color) {
+  RGBA &RGBA::operator *=(const RGBA &color) {
     this->m_red *= color.m_red;
     this->m_green *= color.m_green;
     this->m_blue *= color.m_blue;
     this->m_alpha *= color.m_alpha;
 
     return *this;
-  }
-
-  RGBA &RGBA::operator +=(const RGBA &color) {
-    return (*this + color);
-  }
-
-  RGBA &RGBA::operator -=(const RGBA &color) {
-    return (*this - color);
-  }
-
-  RGBA &RGBA::operator *=(const RGBA &color) {
-    return (*this * color);
   }
   
 }

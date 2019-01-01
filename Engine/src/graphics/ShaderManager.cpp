@@ -24,7 +24,7 @@ struct ShaderSource {
 // DEFAULT SHADER PROGRAMS //
 
 ShaderSource default_basic_shader = {
-  "Basic",
+  BASIC_SHADER_PROGRAM,
   {
     #include "elgar/graphics/shaders/Basic.vert"
   },

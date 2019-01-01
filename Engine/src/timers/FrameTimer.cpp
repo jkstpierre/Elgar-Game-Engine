@@ -7,18 +7,29 @@
 // INCLUDES //
 
 #include "elgar/timers/FrameTimer.hpp"
+#include "elgar/core/Macros.hpp"
 
 namespace elgar {
 
-  // STATIC FIELDS //
-
-  float FrameTimer::m_delta_time = 0.0f;  
-  float FrameTimer::m_time_scale = 1.0f;  
-  float FrameTimer::m_fixed_delta_time = 0.0f;  
-  float FrameTimer::m_fixed_time_scale = 1.0f;
-  float FrameTimer::m_alpha = 0.0f;
-
   // FUNCTIONS //
+
+  FrameTimer::FrameTimer() : Singleton<FrameTimer>(this) {
+    m_delta_time = 0.0f;
+    m_time_scale = 1.0f;
+
+    m_fixed_delta_time = 0.0f;
+    m_fixed_time_scale = 1.0f;
+
+    m_alpha = 0.0f;
+
+    LOG("FrameTimer online...\n");
+  }
+
+  FrameTimer::~FrameTimer() {
+    // Do nothing
+
+    LOG("FrameTimer offline...\n");
+  }
 
   void FrameTimer::SetDeltaTime(const float &dt) {
     m_delta_time = dt;
@@ -40,23 +51,24 @@ namespace elgar {
     m_fixed_time_scale = fixed_time_scale;
   }
 
-  float FrameTimer::GetDeltaTime() {
+  float FrameTimer::GetDeltaTime() const {
     return m_delta_time * m_time_scale;
   }
 
-  float FrameTimer::GetFixedDeltaTime() {
+  float FrameTimer::GetFixedDeltaTime() const {
     return m_fixed_delta_time * m_fixed_time_scale;
   }
 
-  float FrameTimer::GetTimescale() {
+  const float &FrameTimer::GetTimescale() const {
     return m_time_scale;
   }
 
-  float FrameTimer::GetFixedTimescale() {
+  const float &FrameTimer::GetFixedTimescale() const {
     return m_fixed_time_scale;
   }
 
-  float FrameTimer::GetAlpha() {
+  const float &FrameTimer::GetAlpha() const {
     return m_alpha;
   }
+
 }

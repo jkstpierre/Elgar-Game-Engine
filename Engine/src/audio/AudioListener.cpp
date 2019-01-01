@@ -27,16 +27,24 @@ namespace elgar {
   }
 
   void AudioListener::SetPosition(float x, float y, float z) {
-    Movable::SetPosition(x, y, z);
+    Movable::SetPosition({x, y, z});
 
     alListener3f(AL_POSITION, x, y, z);
   }
 
+  void AudioListener::SetPosition(const glm::vec3 &position) {
+    SetPosition(position.x, position.y, position.z);
+  }
+
   void AudioListener::ChangePosition(float dx, float dy, float dz) {
-    Movable::ChangePosition(dx, dy, dz);
+    Movable::ChangePosition({dx, dy, dz});
 
     const glm::vec3 &pos = GetPosition();
 
     alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+  }
+
+  void AudioListener::ChangePosition(const glm::vec3 &delta) {
+    ChangePosition(delta.x, delta.y, delta.z);
   }
 }

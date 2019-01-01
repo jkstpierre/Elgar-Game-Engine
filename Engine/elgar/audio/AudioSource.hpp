@@ -57,7 +57,14 @@ namespace elgar {
      * @param[in]  y     The y Cartesian coordinate
      * @param[in]  z     The z Cartesian coordinate
      */
-    void SetPosition(float x, float y, float z);
+    void SetPosition(const float &x, const float &y, const float &z);
+
+    /**
+     * @brief Set the position of the AudioSource
+     * 
+     * @param position The position vector
+     */
+    void SetPosition(const glm::vec3 &position);
 
     /**
      * @brief      Change the position of the AudioSource
@@ -66,7 +73,14 @@ namespace elgar {
      * @param[in]  dy    The change in y
      * @param[in]  dz    The change in z
      */
-    void ChangePosition(float dx, float dy, float dz);
+    void ChangePosition(const float &dx, const float &dy, const float &dz);
+
+    /**
+     * @brief Change the position by a given delta
+     * 
+     * @param delta The delta vector
+     */
+    void ChangePosition(const glm::vec3 &delta);
 
     /**
      * @brief      Play the AudioSource

@@ -50,6 +50,13 @@ namespace elgar {
     void SetPosition(float x, float y, float z);
 
     /**
+     * @brief Set the position of the AudioListener
+     * 
+     * @param position The position vector
+     */
+    void SetPosition(const glm::vec3 &position);
+
+    /**
      * @brief      Change the position of the AudioListener
      *
      * @param[in]  dx    The change in the x coordinate
@@ -57,6 +64,13 @@ namespace elgar {
      * @param[in]  dz    The change in the z coordinate
      */
     void ChangePosition(float dx, float dy, float dz);
+
+    /**
+     * @brief Change the position of the AudioListener by a delta
+     * 
+     * @param delta The vector to change position by
+     */
+    void ChangePosition(const glm::vec3 &delta);
   };
 
 }

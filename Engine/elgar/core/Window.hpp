@@ -18,7 +18,7 @@
 // DEFINES //
 
 #define DEFAULT_GL_MAJOR_VERSION        4   // Use OpenGL 4.x
-#define DEFAULT_GL_MINOR_VERSION        2   // Use OpenGL x.2
+#define DEFAULT_GL_MINOR_VERSION        3   // Use OpenGL x.3
 
 namespace elgar {
 

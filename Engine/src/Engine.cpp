@@ -21,6 +21,8 @@
 
 #include "elgar/graphics/TextureManager.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
+#include "elgar/graphics/MeshManager.hpp"
+#include "elgar/graphics/renderers/Renderer2D.hpp"
 
 namespace elgar {
 
@@ -63,16 +65,22 @@ namespace elgar {
     // Initialize elgar subsystems
 
     // Initialize the window
-    Window::SetInstance(new Window(window_name, window_width, window_height, window_flags));
+    new Window(window_name, window_width, window_height, window_flags);
 
     // Initialize the audio subsystem
-    AudioSystem::SetInstance(new AudioSystem());
+    new AudioSystem();
 
     // Initialize the texture manager
-    TextureManager::SetInstance(new TextureManager());
+    new TextureManager();
 
-    // Initialize the shader manager
-    ShaderManager::SetInstance(new ShaderManager());
+    // Initialize the shader manager and compile all shader programs
+    new ShaderManager();
+
+    // Initialize the mesh manager and create all default meshes
+    new MeshManager();
+
+    // Initialize the 2D renderer
+    new Renderer2D();
 
     SetRunning(false);  // Engine is not running by default
 
@@ -84,24 +92,28 @@ namespace elgar {
     // Terminate subsystems
 
     // Destroy the audio system
-    if (AudioSystem::GetInstance()) {
+    if (AudioSystem::GetInstance()) 
       delete AudioSystem::GetInstance();
-    }
-
+    
     // Destroy the TextureManager instance
-    if (TextureManager::GetInstance()) {
+    if (TextureManager::GetInstance()) 
       delete TextureManager::GetInstance();
-    }
-
+    
     // Destroy the ShaderManager instance
-    if (ShaderManager::GetInstance()) {
+    if (ShaderManager::GetInstance()) 
       delete ShaderManager::GetInstance();
-    }
+
+    // Destroy the MeshManager instance
+    if (MeshManager::GetInstance())
+      delete MeshManager::GetInstance();
+
+    // Destroy the Renderer2D instance
+    if (Renderer2D::GetInstance())
+      delete Renderer2D::GetInstance();
 
     // Destroy the Window instance
-    if (Window::GetInstance()) {
+    if (Window::GetInstance()) 
       delete Window::GetInstance();
-    }
 
     TTF_Quit(); // Shutdown SDL_ttf
     IMG_Quit(); // Shutdown SDL_image
@@ -123,8 +135,9 @@ namespace elgar {
     /* Frame delta time variables */
     float delta_time = 1.0f / DEFAULT_PHYS_STEPS_PER_SECOND;
     
-    // Set the global fixed dt
-    FrameTimer::SetFixedDeltaTime(delta_time);
+    // Create new frame timer and set the global fixed dt
+    FrameTimer *frame_timer = new FrameTimer();
+    frame_timer->SetFixedDeltaTime(delta_time);
 
     float current_time = (float) SDL_GetTicks() / 1000.0f;
     float accumulator = 0.0f;
@@ -182,7 +195,7 @@ namespace elgar {
       current_time = new_time;
 
       if (update) {
-        FrameTimer::SetDeltaTime(frame_time); // Set the global delta time
+        frame_timer->SetDeltaTime(frame_time); // Set the global delta time
         update(); // Call the supplied user update function
       }
 
@@ -196,15 +209,16 @@ namespace elgar {
         }
       }
 
-      // Compute interpolated alpha for rendering
-      const float alpha = accumulator / delta_time; 
-
-      FrameTimer::SetAlpha(alpha);  // Update global alpha
+      // Compute the alpha
+      frame_timer->SetAlpha(accumulator / delta_time);  // Update global alpha
 
       // Draw the window contents
       if (Window::GetInstance())
         Window::GetInstance()->Present(render);
     }
+
+    // Delete the FrameTimer
+    delete frame_timer;
   }
 
   bool Engine::IsRunning() const {
