@@ -93,6 +93,13 @@ namespace elgar {
      * @return     The alpha value
      */
     const float &GetAlpha() const;
+
+    /**
+     * @brief Compute the current frames per second
+     * 
+     * @return The frames per second
+     */
+    unsigned int GetFPS() const;
   };
 
 }

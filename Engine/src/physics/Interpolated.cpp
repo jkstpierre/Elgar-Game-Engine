@@ -102,7 +102,7 @@ namespace elgar {
     return interpolated;
   }
 
-  glm::mat4 Interpolated::GetModelMatrix() {
+  glm::mat4 Interpolated::GetMatrix() {
     glm::mat4 model_matrix;   // The model matrix for the Interpolated
 
     // Translate the model matrix by the position

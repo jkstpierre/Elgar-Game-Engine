@@ -6,6 +6,9 @@
 
 /*! \mainpage
  *
+ * \htmlonly <style>div.image img[src="elgar.jpg"]{width:200px;}</style> \endhtmlonly 
+ * @image html elgar.jpg "Sir Edward Elgar"
+ * 
  * \section intro_sec Introduction
  *
  * Welcome to Elgar3D's documentation page. This site should serve as a reference manual for any
@@ -14,8 +17,7 @@
  * \section install_sec Installation
  *
  * \subsection step1 Step 1: Installing dependencies
- *
- * etc...
+ *  
  */
 
 #ifndef _ELGAR_GAME_ENGINE_HPP_

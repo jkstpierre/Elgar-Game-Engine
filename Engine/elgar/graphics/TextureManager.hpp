@@ -46,7 +46,7 @@ namespace elgar {
      *
      * @return     true if texture successfully loaded into memory, false otherwise
      */
-    bool LoadTextureFromDisk(const std::string &filepath, const std::string &name = "");
+    bool BuildTexture(const std::string &filepath, const std::string &name = "");
 
     /**
      * @brief      Retrieves a loaded texture by name
@@ -56,6 +56,13 @@ namespace elgar {
      * @return     Pointer to the texture requested or nullptr if not found.
      */
     const Texture *GetTexture(const std::string &texture_name) const;
+
+    /**
+     * @brief Destroy a texture by name
+     * 
+     * @param texture_name The name of the texture to destroy
+     */
+    void DestroyTexture(const std::string &texture_name);
 
   };
 

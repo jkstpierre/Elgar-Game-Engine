@@ -74,6 +74,14 @@ namespace elgar {
       const GLsizei &stride,
       const GLvoid *pointer) const;
 
+    /**
+     * @brief Set the divisor for instancing
+     * 
+     * @param index       The index of the attribute
+     * @param divisor     The number of instances to use the attribute
+     */
+    void AttributeDivisor(const GLuint &index, const GLuint &divisor) const;
+
   };
 
 }

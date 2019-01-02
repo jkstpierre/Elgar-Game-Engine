@@ -71,4 +71,8 @@ namespace elgar {
     return m_alpha;
   }
 
+  unsigned int FrameTimer::GetFPS() const {
+    return (unsigned int)(1.f / m_delta_time);
+  }
+
 }

@@ -113,9 +113,21 @@ namespace elgar {
 
     shader.SetVec4("color", color.GetData()); // Set the color for the sprite
     shader.SetMat4("model_matrix", model_matrix); // Set the model matrix for the sprite
-    
+    shader.SetBool("use_instancing", GL_FALSE); // We are not instance rendering
+
     // Bind the vao for rendering
     m_vao.Bind();
+
+    m_uv_buffer.Bind(); // Bind the uv buffer
+    m_vao.EnableAttribute(1); // Bind attrib 1
+    m_vao.AttributePointer(
+      1,        // Attrib 1
+      2,        // u, v
+      GL_FLOAT, // Data type
+      GL_FALSE, // Do not normalize data
+      0,        // Tightly packed data
+      (GLvoid *)0 // No offset
+    );
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);  // Draw the sprite
 
@@ -125,10 +137,88 @@ namespace elgar {
 
   void Sprite::DrawInstanced(
     const Shader &shader, 
-    const std::vector<const glm::mat4> &model_matrices
+    const RGBA &color,
+    const std::vector<glm::mat4> &model_matrices
   ) const 
   {
+    shader.Use();   // Use our shader program
 
+    // Check for texture
+    if (m_texture) {
+      m_texture->Bind(0);   // Bind the texture to id 0
+      shader.SetBool("use_texture", GL_TRUE); // Tell the shader to enable texture sampling
+    }
+    else {
+      shader.SetBool("use_texture", GL_FALSE);  // Disable texture sampling
+    }
+
+    // Set the color
+    shader.SetVec4("color", color.GetData()); // Set the color for the sprite
+
+    // Enable instancing on the shader
+    shader.SetBool("use_instancing", GL_TRUE);
+
+    // Bind the vao to send data to
+    m_vao.Bind();
+
+    BufferObject model_buffer(GL_ARRAY_BUFFER); // Create a buffer object for the model matrices
+    model_buffer.Bind();  // Bind the buffer
+    model_buffer.FillData(
+      &model_matrices[0][0][0],   // Model matrix data
+      sizeof(glm::mat4) * model_matrices.size(),    // Size in bytes of the buffer
+      GL_STATIC_DRAW              // Data will not change
+    );
+
+    m_vao.EnableAttribute(2); // Bind attrib 2 for 1st row of matrix
+    m_vao.AttributePointer(
+      2,  // Location 2
+      4,  // 1 row of matrix
+      GL_FLOAT, // Data type
+      GL_FALSE, // Do not normalize
+      sizeof(glm::mat4),  // Number of bytes until next equivalent attribute
+      (GLvoid *)0 // No offset
+    );
+
+    m_vao.EnableAttribute(3);
+    m_vao.AttributePointer(
+      3,  // Location 3
+      4,  // 2nd row of matrix
+      GL_FLOAT,
+      GL_FALSE,
+      sizeof(glm::mat4),
+      (GLvoid *)sizeof(glm::vec4)
+    );
+
+    m_vao.EnableAttribute(4);
+    m_vao.AttributePointer(
+      4,  // Location 4
+      4,  // 3rd row of matrix
+      GL_FLOAT,
+      GL_FALSE,
+      sizeof(glm::mat4),
+      (GLvoid *)(sizeof(glm::vec4) * 2)
+    );
+
+    m_vao.EnableAttribute(5);
+    m_vao.AttributePointer(
+      5,  // Location 5
+      4,  // 4th row of matrix
+      GL_FLOAT,
+      GL_FALSE,
+      sizeof(glm::mat4),
+      (GLvoid *)(sizeof(glm::vec4) * 3)
+    );
+
+    // Tell OpenGL to use 1 matrix per instance
+    m_vao.AttributeDivisor(2, 1);
+    m_vao.AttributeDivisor(3, 1);
+    m_vao.AttributeDivisor(4, 1);
+    m_vao.AttributeDivisor(5, 1);
+
+    // Draw the sprites
+    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, model_matrices.size());
+
+    m_vao.Unbind(); // Unbind the vao
   }
 
 }

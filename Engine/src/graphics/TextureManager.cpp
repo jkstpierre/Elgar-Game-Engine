@@ -27,10 +27,12 @@ namespace elgar {
       delete texture;
     }
 
+    m_textures.clear();
+
     LOG("TextureManager offline...\n");
   }
 
-  bool TextureManager::LoadTextureFromDisk(const std::string &filepath, const std::string &name) {
+  bool TextureManager::BuildTexture(const std::string &filepath, const std::string &name) {
     // Check for naming collision
     if (name.empty() && m_textures.find(filepath) != m_textures.end()) {
       LOG("ERROR: Texture already loaded in memory under the name: %s\n", filepath.c_str());
@@ -82,6 +84,13 @@ namespace elgar {
       return m_textures.at(texture_name);
 
     return nullptr;
+  }
+
+  void TextureManager::DestroyTexture(const std::string &name) {
+    if (m_textures.find(name) != m_textures.end()) {
+      delete m_textures.at(name);
+      m_textures.erase(name);
+    }
   }
 
 }

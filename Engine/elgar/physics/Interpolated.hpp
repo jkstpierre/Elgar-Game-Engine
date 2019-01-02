@@ -34,7 +34,11 @@ namespace elgar {
      * @param scale       The scale of the Interpolated
      * @param rotation    The rotation of the Interpolated
      */
-    Interpolated(const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &rotation);
+    Interpolated(
+      const glm::vec3 &position = {0.0f, 0.0f, 0.0f}, 
+      const glm::vec3 &scale    = {1.0f, 1.0f, 1.0f}, 
+      const glm::vec3 &rotation = {0.0f, 0.0f, 0.0f}
+    );
 
     /**
      * @brief Set the position of the Interpolated
@@ -100,11 +104,11 @@ namespace elgar {
     glm::vec3 GetInterpolatedEulerAngles();
 
     /**
-     * @brief Get the model matrix for the Interpolated
+     * @brief Store all the translaions, scalars, and rotations into a single matrix
      * 
-     * @return The model matrix 
+     * @return The matrix
      */
-    glm::mat4 GetModelMatrix();
+    glm::mat4 GetMatrix();
 
   };
 

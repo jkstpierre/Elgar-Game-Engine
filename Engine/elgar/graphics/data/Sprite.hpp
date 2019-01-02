@@ -92,11 +92,13 @@ namespace elgar {
      * @brief Draw the Sprite multiple times with one draw call using Instancing
      * 
      * @param shader          The shader program to use
+     * @param color           The color to use
      * @param model_matrices  The set of model matrices
      */
     void DrawInstanced(
-      const Shader &shader, 
-      const std::vector<const glm::mat4> &model_matrices
+      const Shader &shader,
+      const RGBA &color, 
+      const std::vector<glm::mat4> &model_matrices
     ) const;
 
   };

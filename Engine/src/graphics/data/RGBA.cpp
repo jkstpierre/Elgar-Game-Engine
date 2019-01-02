@@ -47,7 +47,7 @@ namespace elgar {
   }
 
   glm::vec4 RGBA::GetData() const {
-    return {m_red, m_green, m_blue, m_alpha};
+    return {m_red / 255.f, m_green / 255.f, m_blue / 255.f, m_alpha / 255.f};
   }
 
   RGBA &RGBA::operator =(const RGBA &color) {

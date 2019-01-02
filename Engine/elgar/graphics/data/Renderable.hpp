@@ -62,11 +62,13 @@ namespace elgar {
      * @brief Draw the renderable using instanced rendering
      * 
      * @param shader            The shader program to use
+     * @param color             The color to render with
      * @param model_matrices    The model matrices to use
      */
     virtual void DrawInstanced(
       const Shader &shader, 
-      const std::vector<const glm::mat4> &model_matrices
+      const RGBA &color,
+      const std::vector<glm::mat4> &model_matrices
     ) const = 0;
 
   };

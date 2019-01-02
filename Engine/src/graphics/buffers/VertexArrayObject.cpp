@@ -52,4 +52,9 @@ namespace elgar {
       pointer
     );
   }
+
+  void VertexArrayObject::AttributeDivisor(const GLuint &index, const GLuint &divisor) const {
+    glVertexAttribDivisor(index, divisor);
+  }
+
 }
