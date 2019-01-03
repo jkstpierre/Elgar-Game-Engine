@@ -8,13 +8,13 @@
 #include "elgar/audio/AudioSource.hpp"
 #include "elgar/audio/AudioListener.hpp"
 #include "elgar/core/AudioSystem.hpp"
-#include "elgar/graphics/TextureManager.hpp"
+#include "elgar/graphics/ImageLoader.hpp"
 #include "elgar/core/Window.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
 #include "elgar/core/IO.hpp"
 
 #include "elgar/graphics/data/RGBA.hpp"
-#include "elgar/graphics/data/Sprite.hpp"
+#include "elgar/graphics/renderers/SpriteRenderer.hpp"
 #include "elgar/graphics/Camera.hpp"
 
 #include "elgar/timers/FrameTimer.hpp"
@@ -31,15 +31,14 @@
 
 using namespace elgar;
 
-#define WIDTH 800
-#define HEIGHT 600
-#define INSTANCE_COUNT  10000
+#define WIDTH 1920
+#define HEIGHT 1080
+#define INSTANCE_COUNT  100000
 
 Engine *engine = nullptr;
 
-Sprite *sprite = nullptr;
-
 const Shader *shader = nullptr;
+Texture *texture = nullptr;
 
 std::vector<glm::mat4> models;
 
@@ -51,13 +50,21 @@ Camera camera(
 void update() {
   static FrameTimer *frame_timer = FrameTimer::GetInstance();
 
-  if (Keyboard::IsKeyPressed(SDLK_ESCAPE))
+  static Keyboard *keyboard = Keyboard::GetInstance();
+  if (!keyboard)
+    return;
+
+  if (keyboard->IsKeyPressed(SDLK_ESCAPE))
     engine->SetRunning(false);
 
-  if (Keyboard::IsKeyPressed(SDLK_RIGHT))
-    camera.ChangePosition({100 * frame_timer->GetDeltaTime(), 0.0f, 0.0f});
-  
-  std::cout << frame_timer->GetFPS() << std::endl;
+  if (keyboard->IsKeyPressed(SDLK_RIGHT))
+    camera.ChangePosition({100.0f * frame_timer->GetDeltaTime(), 0.0f, 0.0f});
+  if (keyboard->IsKeyPressed(SDLK_LEFT))
+    camera.ChangePosition({-100.0f * frame_timer->GetDeltaTime(), 0.0f, 0.0f});
+  if (keyboard->IsKeyPressed(SDLK_UP))
+    camera.ChangePosition({0.0f, 100.0f * frame_timer->GetDeltaTime(), 0.0f});
+  if (keyboard->IsKeyPressed(SDLK_DOWN))
+    camera.ChangePosition({0.0f, -100.0f * frame_timer->GetDeltaTime(), 0.0f});
 }
 
 void fixed_update() {
@@ -65,29 +72,44 @@ void fixed_update() {
 }
 
 void render() {
-  camera.Draw(*shader);
-  sprite->DrawInstanced(
+  static SpriteRenderer *spr_rend = SpriteRenderer::GetInstance();
+
+  // Nothing to do if renderer does not exist
+  if (!spr_rend)
+    return;
+
+  camera.Draw(*shader);   // Draw the camera
+
+  spr_rend->DrawInstanced(
     *shader,
+    models,
     {0xFF, 0x25, 0x77, 0xFF},
-    models
+    texture
   );
 
-  sprite->Draw(
+  spr_rend->Draw(
     *shader,
-    {0xFF, 0xFF, 0x99, 0xFF},
-    glm::scale(glm::translate(glm::mat4(), {300.0f, 300.0f, 0.0f}), {75.0f, 75.0f, 0.0f})
+    glm::scale(glm::mat4(), {100.0f, 100.0f, 0.0f}),
+    {0x12, 0x23, 0x34, 0xFF},
+    texture
   );
 }
 
 int main() {
   // Create new instance of Elgar
-  engine = new Engine("StarLight", WIDTH, HEIGHT, NONE);
+  engine = new Engine("StarLight", WIDTH, HEIGHT, FULLSCREEN);
 
-  Window::GetInstance()->SetVerticalSync(false);
+  ImageLoader *image_loader = ImageLoader::GetInstance();
 
-  TextureManager::GetInstance()->BuildTexture("destroyer.png", "destroyer");
+  if (image_loader) {
+    image_loader->LoadFromDisk("destroyer.png", "destroyer");
+  }
 
-  sprite = new Sprite(TextureManager::GetInstance()->GetTexture("destroyer"));
+  const Image *img = image_loader->Read("destroyer");
+
+  if (img) {
+    texture = new Texture(*img);  // Create a texture
+  }
 
   shader = ShaderManager::GetInstance()->GetShader(BASIC_SHADER_PROGRAM);
 
@@ -102,7 +124,8 @@ int main() {
 
   engine->Run(update, fixed_update, render);
 
-  delete sprite;
+  if (texture)
+    delete texture;
 
   // Unload resources from RAM
   delete engine;

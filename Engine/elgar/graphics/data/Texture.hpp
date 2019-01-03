@@ -11,34 +11,31 @@
 
 #include <GL/glew.h>
 
+#include "elgar/graphics/data/Image.hpp"
+
 namespace elgar {
   /**
    * @brief      The Texture class is a simple wrapper around OpenGL textures
    */
   class Texture {
-  friend class TextureManager;
   private:
     GLuint  m_id;       // The id of the OpenGL texture
     GLsizei m_width;    // The width in pixels
     GLsizei m_height;   // The height in pixels
 
-  private:
+  public:
     /**
-     * @brief      Builds a new Texture
+     * @brief      Builds a new Texture from Image data
      *
-     * @param      data    The pixel data for the texture
-     * @param[in]  width   The width (in pixels)
-     * @param[in]  height  The height (in pixels)
-     * @param[in]  mode    The mode  (the format)
+     * @param      Reference to the Image data to build texture from
      */
-    Texture(GLubyte *data, const GLsizei &width, const GLsizei &height, const GLint &mode);
+    Texture(const Image &image);
 
     /**
      * @brief      Destroys a Texture
      */
     virtual ~Texture();
 
-  public:
     /**
      * @brief Bind the texture to an index for rendering
      * 

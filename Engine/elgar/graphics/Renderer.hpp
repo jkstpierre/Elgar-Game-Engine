@@ -15,7 +15,6 @@ namespace elgar {
    * @brief      A Renderer is an abstract base class to be implemented by specific graphics renderers
    */
   class Renderer {
-  friend class Window;  // Grant window access to private members
   public:
     Renderer();
 

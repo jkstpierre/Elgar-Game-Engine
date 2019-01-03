@@ -8,13 +8,19 @@
 
 #include "elgar/core/IO.hpp"
 
+#include "elgar/core/Macros.hpp"
+
 namespace elgar {
 
-  // KEYBOARD STATIC FIELDS //
-
-  std::unordered_map<SDL_Keycode, bool> Keyboard::m_keys;
-
   // KEYBOARD FUNCTIONS //
+
+  Keyboard::Keyboard() : Singleton<Keyboard>(this) {
+    LOG("Keyboard online...\n");
+  }
+
+  Keyboard::~Keyboard() {
+    LOG("Keyboard offline...\n");
+  }
 
   void Keyboard::PressKey(const SDL_Keycode &key) {
     m_keys[key] = true;
@@ -31,13 +37,15 @@ namespace elgar {
     return m_keys[key];
   }
 
-  // MOUSE STATIC FIELDS //
-
-  glm::vec2 Mouse::m_pos;
-
-  unsigned char Mouse::m_buttons;
-
   // MOUSE FUNCTIONS //
+
+  Mouse::Mouse() : Singleton<Mouse>(this) {
+    LOG("Mouse online...\n");
+  }
+
+  Mouse::~Mouse() {
+    LOG("Mouse offline...\n");
+  }
 
   void Mouse::PressButton(const MouseButton &button) {
     m_buttons |= (unsigned char)button;

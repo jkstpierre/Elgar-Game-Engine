@@ -11,21 +11,12 @@
 
 #include "elgar/core/Singleton.hpp"
 
+#include "elgar/graphics/data/Image.hpp"
+
 #include <unordered_map>
 #include <string>
 
 namespace elgar {
-
-  /**
-   * @brief The Image struct defines the relevant attributes for image data
-   * 
-   */
-  struct Image {
-    unsigned char *data;  // Pixel data
-    unsigned int width;   // Width in pixels
-    unsigned int height;  // Height in pixels
-    unsigned int channels;  // Number of channels
-  };
 
   /**
    * @brief The ImageLoader class handles the loading and storage of image data during
@@ -65,9 +56,9 @@ namespace elgar {
      * @brief Read the image data from memory
      * 
      * @param name The name of the image
-     * @return The image data
+     * @return The image data or nullptr if image does not exist
      */
-    Image Read(const std::string &name);
+    const Image *Read(const std::string &name) const;
 
   };
 

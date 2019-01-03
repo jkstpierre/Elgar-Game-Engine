@@ -18,7 +18,7 @@ namespace elgar {
    */
   class VertexArrayObject {
   private:
-    GLuint m_id;  // The id of the vao
+    GLuint    m_id;  // The id of the vao
 
   public:
     /**

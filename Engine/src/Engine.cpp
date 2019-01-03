@@ -19,10 +19,10 @@
 
 #include "elgar/timers/FrameTimer.hpp"
 
-#include "elgar/graphics/TextureManager.hpp"
+#include "elgar/graphics/ImageLoader.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
 #include "elgar/graphics/MeshManager.hpp"
-#include "elgar/graphics/renderers/Renderer2D.hpp"
+#include "elgar/graphics/renderers/SpriteRenderer.hpp"
 
 namespace elgar {
 
@@ -62,7 +62,7 @@ namespace elgar {
       throw Exception("ERROR: Failed to initialize SDL2_ttf! SDL_Error: " + std::string(TTF_GetError()));
     }
 
-    // Initialize elgar subsystems
+    // Initialize elgar subsystem //
 
     // Initialize the window
     new Window(window_name, window_width, window_height, window_flags);
@@ -70,8 +70,8 @@ namespace elgar {
     // Initialize the audio subsystem
     new AudioSystem();
 
-    // Initialize the texture manager
-    new TextureManager();
+    // Initialize the image loader
+    new ImageLoader();
 
     // Initialize the shader manager and compile all shader programs
     new ShaderManager();
@@ -79,8 +79,8 @@ namespace elgar {
     // Initialize the mesh manager and create all default meshes
     new MeshManager();
 
-    // Initialize the 2D renderer
-    new Renderer2D();
+    // Initialize the SpriteRenderer
+    new SpriteRenderer();
 
     SetRunning(false);  // Engine is not running by default
 
@@ -95,9 +95,9 @@ namespace elgar {
     if (AudioSystem::GetInstance()) 
       delete AudioSystem::GetInstance();
     
-    // Destroy the TextureManager instance
-    if (TextureManager::GetInstance()) 
-      delete TextureManager::GetInstance();
+    // Destroy the ImageLoader instance
+    if (ImageLoader::GetInstance()) 
+      delete ImageLoader::GetInstance();
     
     // Destroy the ShaderManager instance
     if (ShaderManager::GetInstance()) 
@@ -108,8 +108,8 @@ namespace elgar {
       delete MeshManager::GetInstance();
 
     // Destroy the Renderer2D instance
-    if (Renderer2D::GetInstance())
-      delete Renderer2D::GetInstance();
+    if (SpriteRenderer::GetInstance())
+      delete SpriteRenderer::GetInstance();
 
     // Destroy the Window instance
     if (Window::GetInstance()) 
@@ -139,6 +139,10 @@ namespace elgar {
     FrameTimer *frame_timer = new FrameTimer();
     frame_timer->SetFixedDeltaTime(delta_time);
 
+    // Create the keyboard and mouse
+    Keyboard *keyboard = new Keyboard();
+    Mouse *mouse = new Mouse();
+
     float current_time = (float) SDL_GetTicks() / 1000.0f;
     float accumulator = 0.0f;
 
@@ -153,36 +157,36 @@ namespace elgar {
         else if (e.type == SDL_KEYDOWN) {
           // Handle key press
 
-          Keyboard::PressKey(e.key.keysym.sym);
+          keyboard->PressKey(e.key.keysym.sym);
         }
         else if (e.type == SDL_KEYUP) {
           // Handle key release
 
-          Keyboard::ReleaseKey(e.key.keysym.sym);
+          keyboard->ReleaseKey(e.key.keysym.sym);
         }
         else if (e.type == SDL_MOUSEBUTTONDOWN) {
           // Handle mouse click
 
           if (e.button.button == SDL_BUTTON_LEFT) {
-            Mouse::PressButton(LEFT); // Handle left click
+            mouse->PressButton(LEFT); // Handle left click
           }
           else if (e.button.button == SDL_BUTTON_RIGHT) {
-            Mouse::PressButton(RIGHT);  // Handle right click
+            mouse->PressButton(RIGHT);  // Handle right click
           }
         }
         else if (e.type == SDL_MOUSEBUTTONUP) {
           // Handle mouse release
 
           if (e.button.button == SDL_BUTTON_LEFT) {
-            Mouse::ReleaseButton(LEFT); // Handle left release 
+            mouse->ReleaseButton(LEFT); // Handle left release 
           }
           else if (e.button.button == SDL_BUTTON_RIGHT) {
-            Mouse::ReleaseButton(RIGHT);  // Handle right release
+            mouse->ReleaseButton(RIGHT);  // Handle right release
           }
         }
         else if (e.type == SDL_MOUSEMOTION) {
           // Handle mouse motion
-          Mouse::SetPosition({e.motion.x, e.motion.y});
+          mouse->SetPosition({e.motion.x, e.motion.y});
         }
       }
 
@@ -219,6 +223,12 @@ namespace elgar {
 
     // Delete the FrameTimer
     delete frame_timer;
+
+    // Delete the keyboard
+    delete keyboard;
+
+    // Delete the mouse
+    delete mouse;
   }
 
   bool Engine::IsRunning() const {

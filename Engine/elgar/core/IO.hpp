@@ -9,6 +9,8 @@
 
 // INCLUDES //
 
+#include "elgar/core/Singleton.hpp"
+
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include <unordered_map>
@@ -18,9 +20,23 @@ namespace elgar {
   /**
    * @brief      The Keyboard captures all key events during application runtime
    */
-  class Keyboard {
+  class Keyboard : public Singleton<Keyboard> {
+  friend class Engine;    // Grant the Engine exclusive instantiation rights
   private:
-    static std::unordered_map<SDL_Keycode, bool> m_keys;  // The key table
+    std::unordered_map<SDL_Keycode, bool> m_keys;  // The key table
+
+  private:
+    /**
+     * @brief Construct a new Keyboard object
+     * 
+     */
+    Keyboard();
+
+    /**
+     * @brief Destroy the Keyboard object
+     * 
+     */
+    virtual ~Keyboard();
 
   public:
     /**
@@ -28,14 +44,14 @@ namespace elgar {
      *
      * @param[in]  key   The key
      */
-    static void PressKey(const SDL_Keycode &key);
+    void PressKey(const SDL_Keycode &key);
 
     /**
      * @brief      Releases a key on the keyboard
      *
      * @param[in]  key   The key
      */
-    static void ReleaseKey(const SDL_Keycode &key);
+    void ReleaseKey(const SDL_Keycode &key);
 
     /**
      * @brief      Determines if a given key is pressed
@@ -44,7 +60,7 @@ namespace elgar {
      *
      * @return     True if key pressed, False otherwise.
      */
-    static bool IsKeyPressed(const SDL_Keycode &key);
+    bool IsKeyPressed(const SDL_Keycode &key);
 
   };
 
@@ -60,11 +76,25 @@ namespace elgar {
   /**
    * @brief      The Mouse captures all mouse events during application runtime
    */
-  class Mouse {
+  class Mouse : public Singleton<Mouse> {
+  friend class Engine;      // Grant the engine exclusive instantiation rights
   private:
-    static glm::vec2 m_pos; // The 2D position of the cursor
+    glm::vec2 m_pos; // The 2D position of the cursor
 
-    static unsigned char m_buttons;  // Track button presses
+    unsigned char m_buttons;  // Track button presses
+
+  private:
+    /**
+     * @brief Construct a new Mouse object
+     * 
+     */
+    Mouse();
+
+    /**
+     * @brief Destroy the Mouse object
+     * 
+     */
+    virtual ~Mouse();
 
   public:
     /**
@@ -72,35 +102,35 @@ namespace elgar {
      *
      * @param[in]  button  The button
      */
-    static void PressButton(const MouseButton &button);
+    void PressButton(const MouseButton &button);
 
     /**
      * @brief      Release a MouseButton
      *
      * @param[in]  button  The button
      */
-    static void ReleaseButton(const MouseButton &button);
+    void ReleaseButton(const MouseButton &button);
 
     /**
      * @brief      Check if a given MouseButton is pressed
      *
      * @param[in]  button  The button
      */
-    static bool IsButtonPressed(const MouseButton &button);
+    bool IsButtonPressed(const MouseButton &button);
 
     /**
      * @brief      Set the position of the mouse
      *
      * @param[in]  pos   The position
      */
-    static void SetPosition(const glm::vec2 &pos);
+    void SetPosition(const glm::vec2 &pos);
 
     /**
      * @brief      Get the position of the mouse
      *
      * @return     The position.
      */
-    static glm::vec2 GetPosition();
+    glm::vec2 GetPosition();
   };
 
 }

@@ -12,7 +12,7 @@ namespace elgar {
 
   // FUNCTIONS //
 
-  Texture::Texture(GLubyte *data, const GLsizei &width, const GLsizei &height, const GLint &mode) {
+  Texture::Texture(const Image &image) {
     glGenTextures(1, &m_id);  // Generate a new OpenGL texture
     this->Bind(); // Bind the texture
 
@@ -22,15 +22,19 @@ namespace elgar {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    GLint mode = GL_RGB;
+    if (image.channels == 4)
+      mode = GL_RGBA;
+
     // Send OpenGL the texture data
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, width, height, 0, mode, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, image.width, image.height, 0, mode, GL_UNSIGNED_BYTE, image.data);
 
     // Create Mipmap for the texture
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // Copy the width and height
-    m_width = width;
-    m_height = height;
+    m_width = image.width;
+    m_height = image.height;
   }
 
   Texture::~Texture() {
