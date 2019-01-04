@@ -14,7 +14,8 @@
 
 // DEFINES //
 
-#define BASIC_SHADER_PROGRAM    "Basic"   // Name of the default basic shader
+#define SHADER_BASIC_PROGRAM    "PROGRAM_0"   // Name of the default basic shader
+#define SHADER_TEXT_PROGRAM     "PROGRAM_1"   // Name of the text shader program
 
 namespace elgar {
 

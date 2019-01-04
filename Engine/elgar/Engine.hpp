@@ -63,6 +63,18 @@ namespace elgar {
      */
     virtual ~Engine();
 
+    /**
+     * @brief     Initialize Elgar3D's subsystems
+     * 
+     */
+    void InitSubsystems();
+
+    /**
+     * @brief     Disable Elgar3D's subsystems
+     * 
+     */
+    void DisableSubsystems();
+
   public:
     /**
      * @brief      Run the application loop

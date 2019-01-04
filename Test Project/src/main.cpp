@@ -5,9 +5,6 @@
 */
 
 #include "elgar/Engine.hpp"
-#include "elgar/audio/AudioSource.hpp"
-#include "elgar/audio/AudioListener.hpp"
-#include "elgar/core/AudioSystem.hpp"
 #include "elgar/graphics/ImageLoader.hpp"
 #include "elgar/core/Window.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
@@ -15,6 +12,7 @@
 
 #include "elgar/graphics/data/RGBA.hpp"
 #include "elgar/graphics/renderers/SpriteRenderer.hpp"
+#include "elgar/graphics/renderers/TextRenderer.hpp"
 #include "elgar/graphics/Camera.hpp"
 
 #include "elgar/timers/FrameTimer.hpp"
@@ -37,7 +35,8 @@ using namespace elgar;
 
 Engine *engine = nullptr;
 
-const Shader *shader = nullptr;
+const Shader *basic_shader = nullptr;
+const Shader *text_shader = nullptr;
 Texture *texture = nullptr;
 
 std::vector<glm::mat4> models;
@@ -73,26 +72,33 @@ void fixed_update() {
 
 void render() {
   static SpriteRenderer *spr_rend = SpriteRenderer::GetInstance();
+  static TextRenderer *tex_rend = TextRenderer::GetInstance();
 
   // Nothing to do if renderer does not exist
-  if (!spr_rend)
+  if (!spr_rend || !tex_rend)
     return;
 
-  camera.Draw(*shader);   // Draw the camera
+  if (!basic_shader || !text_shader)
+    return;
+
+  camera.Draw(*basic_shader);   // Draw the camera
+  camera.Draw(*text_shader);     
 
   spr_rend->DrawInstanced(
-    *shader,
+    *basic_shader,
     models,
     {0xFF, 0x25, 0x77, 0xFF},
     texture
   );
 
   spr_rend->Draw(
-    *shader,
-    glm::scale(glm::mat4(), {100.0f, 100.0f, 0.0f}),
-    {0x12, 0x23, 0x34, 0xFF},
-    texture
+      *basic_shader,
+      glm::scale(glm::mat4(), {100.0f, 100.0f, 0.0f}),
+      {0x12, 0x23, 0x34, 0xFF},
+      texture
   );
+
+  tex_rend->Draw(*text_shader, "What day Is ITTT!", {0xFF, 0xFF, 0xFF, 0xFF}, glm::translate(glm::mat4(), {600, 400, 0}), 1.0f);
 }
 
 int main() {
@@ -111,7 +117,8 @@ int main() {
     texture = new Texture(*img);  // Create a texture
   }
 
-  shader = ShaderManager::GetInstance()->GetShader(BASIC_SHADER_PROGRAM);
+  basic_shader = ShaderManager::GetInstance()->GetShader(SHADER_BASIC_PROGRAM);
+  text_shader  = ShaderManager::GetInstance()->GetShader(SHADER_TEXT_PROGRAM);
 
   for(int i = 0; i < INSTANCE_COUNT; i++) {
     models.push_back(
@@ -121,6 +128,10 @@ int main() {
       )
     );
   }
+
+  TextRenderer *text_renderer = TextRenderer::GetInstance();
+  
+  text_renderer->BindFont("fonts/FreeMono.ttf", 48);
 
   engine->Run(update, fixed_update, render);
 

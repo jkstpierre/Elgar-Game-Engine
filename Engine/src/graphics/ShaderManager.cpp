@@ -24,12 +24,23 @@ struct ShaderSource {
 // DEFAULT SHADER PROGRAMS //
 
 ShaderSource default_basic_shader = {
-  BASIC_SHADER_PROGRAM,
+  SHADER_BASIC_PROGRAM,
   {
     #include "elgar/graphics/shaders/Basic.vert"
   },
   {
     #include "elgar/graphics/shaders/Basic.frag"
+  },
+  ""    // NO GEOMETRY SHADER
+};
+
+ShaderSource default_text_shader = {
+  SHADER_TEXT_PROGRAM,
+  {
+    #include "elgar/graphics/shaders/Text.vert"
+  },
+  {
+    #include "elgar/graphics/shaders/Text.frag"
   },
   ""    // NO GEOMETRY SHADER
 };
@@ -68,8 +79,16 @@ namespace elgar {
 
     LOG("Shader %s compiled and linked...\n", default_basic_shader.name.c_str());
 
-    // Add the shader
+    Shader *text_shader = new Shader(
+      default_text_shader.vertex_code.c_str(),
+      default_text_shader.fragment_code.c_str()
+    );
+
+    LOG("Shader %s compiled and linked...\n", default_text_shader.name.c_str());
+
+    // Add the shaders
     m_shaders.insert(std::pair<std::string, Shader *>(default_basic_shader.name, basic_shader));
+    m_shaders.insert(std::pair<std::string, Shader *>(default_text_shader.name, text_shader));
   }
 
   bool ShaderManager::CreateShader(

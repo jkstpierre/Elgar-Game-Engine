@@ -12,29 +12,40 @@ namespace elgar {
 
   // FUNCTIONS //
 
-  Texture::Texture(const Image &image) {
+  Texture::Texture(const Image &image, const TextureParams &params) {
     glGenTextures(1, &m_id);  // Generate a new OpenGL texture
     this->Bind(); // Bind the texture
 
     // Set the texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrap_mode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.wrap_mode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.filter_mode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.filter_mode);
 
     GLint mode = GL_RGB;
-    if (image.channels == 4)
+    if (image.channels == 1) {
+      mode = GL_RED;
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Set the pixel storage mode
+    }
+    else if (image.channels == 4)
       mode = GL_RGBA;
 
     // Send OpenGL the texture data
     glTexImage2D(GL_TEXTURE_2D, 0, mode, image.width, image.height, 0, mode, GL_UNSIGNED_BYTE, image.data);
 
-    // Create Mipmap for the texture
+    // Generate mipmaps for the texture
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // Copy the width and height
     m_width = image.width;
     m_height = image.height;
+
+    // Reset pixel storage mode if necessary
+    if (image.channels == 1) {
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 4);  // Back to default value
+    }
+
+    this->Unbind(); // Unbind the texture
   }
 
   Texture::~Texture() {

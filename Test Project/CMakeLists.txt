@@ -21,10 +21,9 @@ include(FindPkgConfig)
 
 # Specify the required packages
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image >= 2.0.0)
-PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf >= 2.0.0)
 PKG_SEARCH_MODULE(OPENAL REQUIRED openal)
 PKG_SEARCH_MODULE(FREEALUT REQUIRED freealut)
+PKG_SEARCH_MODULE(FREETYPE2 REQUIRED freetype2)
 PKG_SEARCH_MODULE(GL REQUIRED gl)
 PKG_SEARCH_MODULE(GLEW REQUIRED glew)
 
@@ -35,6 +34,7 @@ add_executable(TestProject ${test_src})
 # Set the include directories
 target_include_directories(TestProject PRIVATE .)
 target_include_directories(TestProject PRIVATE ${GLM_INCLUDE_DIRS})
+target_include_directories(TestProject PRIVATE ${FREETYPE2_INCLUDE_DIRS})
 target_include_directories(TestProject PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(TestProject PRIVATE "../Engine/")
 
@@ -43,9 +43,8 @@ target_link_libraries(TestProject ${CMAKE_SOURCE_DIR}/../Engine/libElgar.a)
 
 # Link the libraries
 target_link_libraries(TestProject ${SDL2_LIBRARIES})
-target_link_libraries(TestProject ${SDL2IMAGE_LIBRARIES})
-target_link_libraries(TestProject ${SDL2TTF_LIBRARIES})
 target_link_libraries(TestProject ${OPENAL_LIBRARIES})
 target_link_libraries(TestProject ${FREEALUT_LIBRARIES})
+target_link_libraries(TestProject ${FREETYPE2_LIBRARIES})
 target_link_libraries(TestProject ${GL_LIBRARIES})
 target_link_libraries(TestProject ${GLEW_LIBRARIES})

@@ -21,10 +21,9 @@ include(FindPkgConfig)
 
 # Specify the required packages
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image >= 2.0.0)
-PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf >= 2.0.0)
 PKG_SEARCH_MODULE(OPENAL REQUIRED openal)
 PKG_SEARCH_MODULE(FREEALUT REQUIRED freealut)
+PKG_SEARCH_MODULE(FREETYPE2 REQUIRED freetype2)
 PKG_SEARCH_MODULE(GL REQUIRED gl)
 PKG_SEARCH_MODULE(GLEW REQUIRED glew)
 
@@ -35,14 +34,14 @@ add_library(Elgar STATIC ${elgar_src})
 # Set the include directories
 target_include_directories(Elgar PRIVATE .)
 target_include_directories(Elgar PRIVATE ${SDL2_INCLUDE_DIRS})
+target_include_directories(Elgar PRIVATE ${FREETYPE2_INCLUDE_DIRS})
 target_include_directories(Elgar PRIVATE ${GLM_INCLUDE_DIRS})
 
 # Link the libraries
 target_link_libraries(Elgar ${SDL2_LIBRARIES})
-target_link_libraries(Elgar ${SDL2IMAGE_LIBRARIES})
-target_link_libraries(Elgar ${SDL2TTF_LIBRARIES})
 target_link_libraries(Elgar ${OPENAL_LIBRARIES})
 target_link_libraries(Elgar ${FREEALUT_LIBRARIES})
+target_link_libraries(Elgar ${FREETYPE2_LIBRARIES})
 target_link_libraries(Elgar ${GL_LIBRARIES})
 target_link_libraries(Elgar ${GLEW_LIBRARIES})
 

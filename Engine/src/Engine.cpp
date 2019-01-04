@@ -7,8 +7,6 @@
 // INCLUDES //
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "elgar/Engine.hpp"
 #include "elgar/core/Exception.hpp"
@@ -20,9 +18,12 @@
 #include "elgar/timers/FrameTimer.hpp"
 
 #include "elgar/graphics/ImageLoader.hpp"
+#include "elgar/graphics/TextureStorage.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
 #include "elgar/graphics/MeshManager.hpp"
+
 #include "elgar/graphics/renderers/SpriteRenderer.hpp"
+#include "elgar/graphics/renderers/TextRenderer.hpp"
 
 namespace elgar {
 
@@ -45,28 +46,34 @@ namespace elgar {
       throw Exception("ERROR: Failed to initialize SDL! SDL_Error: " + std::string(SDL_GetError()));
     }
 
-    // Enable PNG image loading
-    int flags = IMG_INIT_PNG;
-    code = IMG_Init(flags); 
-
-    // If something went wrong
-    if ((code & flags) != flags) {
-      throw Exception("ERROR: Failed to initialize SDL2_image! SDL_Error: " + std::string(IMG_GetError()));
-    }
-
-    // Enable true type fonts
-    code = TTF_Init();
-
-    // If something went wrong
-    if(code < 0) {
-      throw Exception("ERROR: Failed to initialize SDL2_ttf! SDL_Error: " + std::string(TTF_GetError()));
-    }
-
-    // Initialize elgar subsystem //
-
     // Initialize the window
     new Window(window_name, window_width, window_height, window_flags);
 
+    // Initialize elgar subsystem //
+
+    InitSubsystems();
+
+    SetRunning(false);  // Engine is not running by default
+
+    // Give status log
+    LOG("Elgar online...\n");
+  }
+
+  Engine::~Engine() {
+    // Terminate subsystems
+
+    DisableSubsystems();
+
+    // Destroy the Window instance
+    if (Window::GetInstance()) 
+      delete Window::GetInstance();
+
+    SDL_Quit(); // Shutdown SDL
+
+    LOG("Elgar offline...\n");
+  }
+
+  void Engine::InitSubsystems() {
     // Initialize the audio subsystem
     new AudioSystem();
 
@@ -79,18 +86,18 @@ namespace elgar {
     // Initialize the mesh manager and create all default meshes
     new MeshManager();
 
+    // Initialize TextureStorage
+    new TextureStorage();
+
     // Initialize the SpriteRenderer
     new SpriteRenderer();
 
-    SetRunning(false);  // Engine is not running by default
+    // Initialize the TextRenderer
+    new TextRenderer();
 
-    // Give status log
-    LOG("Elgar online...\n");
   }
 
-  Engine::~Engine() {
-    // Terminate subsystems
-
+  void Engine::DisableSubsystems() {
     // Destroy the audio system
     if (AudioSystem::GetInstance()) 
       delete AudioSystem::GetInstance();
@@ -107,19 +114,18 @@ namespace elgar {
     if (MeshManager::GetInstance())
       delete MeshManager::GetInstance();
 
+    // Destroy the TextureStorage instance
+    if (TextureStorage::GetInstance())
+      delete TextureStorage::GetInstance();
+
     // Destroy the Renderer2D instance
     if (SpriteRenderer::GetInstance())
       delete SpriteRenderer::GetInstance();
 
-    // Destroy the Window instance
-    if (Window::GetInstance()) 
-      delete Window::GetInstance();
+    // Destroy the TextRenderer instance
+    if (TextRenderer::GetInstance())
+      delete TextRenderer::GetInstance();
 
-    TTF_Quit(); // Shutdown SDL_ttf
-    IMG_Quit(); // Shutdown SDL_image
-    SDL_Quit(); // Shutdown SDL
-
-    LOG("Elgar offline...\n");
   }
 
   void Engine::Run(void (*update)(), void (*fixed_update)(), void (*render)()) {

@@ -15,6 +15,15 @@
 
 namespace elgar {
   /**
+   * @brief     The TextureParams struct details how to render the texture
+   * 
+   */
+  struct TextureParams {
+    GLint   wrap_mode;
+    GLint   filter_mode;
+  };
+
+  /**
    * @brief      The Texture class is a simple wrapper around OpenGL textures
    */
   class Texture {
@@ -25,11 +34,12 @@ namespace elgar {
 
   public:
     /**
-     * @brief      Builds a new Texture from Image data
+     * @brief       Builds a new Texture from Image data
      *
-     * @param      Reference to the Image data to build texture from
+     * @param       Reference to the Image data to build texture from
+     * @param       TextureParams struct containing data on how to render the texture
      */
-    Texture(const Image &image);
+    Texture(const Image &image, const TextureParams &params = {GL_REPEAT, GL_LINEAR});
 
     /**
      * @brief      Destroys a Texture
