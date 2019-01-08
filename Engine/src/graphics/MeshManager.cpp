@@ -44,10 +44,7 @@ namespace elgar {
       },         
       {
         // No texture
-      },
-      {
-        0xFF, 0xFF, 0xFF, 0xFF    // Set color to white
-      }    
+      }
     );
 
     Register(MESH_MANAGER_BASIC_QUAD, basic_2d_quad);   // Register the quad

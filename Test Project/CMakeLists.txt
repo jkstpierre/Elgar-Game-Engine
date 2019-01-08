@@ -26,6 +26,7 @@ PKG_SEARCH_MODULE(FREEALUT REQUIRED freealut)
 PKG_SEARCH_MODULE(FREETYPE2 REQUIRED freetype2)
 PKG_SEARCH_MODULE(GL REQUIRED gl)
 PKG_SEARCH_MODULE(GLEW REQUIRED glew)
+PKG_SEARCH_MODULE(ASSIMP REQUIRED assimp)
 
 # Add all source files to the library
 file(GLOB_RECURSE test_src "src/*.cpp")
@@ -36,6 +37,7 @@ target_include_directories(TestProject PRIVATE .)
 target_include_directories(TestProject PRIVATE ${GLM_INCLUDE_DIRS})
 target_include_directories(TestProject PRIVATE ${FREETYPE2_INCLUDE_DIRS})
 target_include_directories(TestProject PRIVATE ${SDL2_INCLUDE_DIRS})
+target_include_directories(TestProject PRIVATE ${ASSIMP_INCLUDE_DIRS})
 target_include_directories(TestProject PRIVATE "../Engine/")
 
 # Link to Elgar
@@ -48,3 +50,4 @@ target_link_libraries(TestProject ${FREEALUT_LIBRARIES})
 target_link_libraries(TestProject ${FREETYPE2_LIBRARIES})
 target_link_libraries(TestProject ${GL_LIBRARIES})
 target_link_libraries(TestProject ${GLEW_LIBRARIES})
+target_link_libraries(TestProject ${ASSIMP_LIBRARIES})

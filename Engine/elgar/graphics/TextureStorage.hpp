@@ -57,6 +57,7 @@ namespace elgar {
      * @return          Const pointer to the texture or nullptr if not found
      */
     const Texture *Load(const std::string &name) const;
+    
   };
 
 }

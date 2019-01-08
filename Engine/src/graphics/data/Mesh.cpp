@@ -7,17 +7,24 @@
 // INCLUDES //
 
 #include "elgar/graphics/data/Mesh.hpp"
+#include "elgar/core/Exception.hpp"
 
 namespace elgar {
 
   // FUNCTIONS //
 
   Mesh::Mesh(
-    const std::vector<Vertex> vertices,
-    const std::vector<GLuint> indices,
-    const std::vector<const Texture *> textures,
-    const RGBA &color
-  ) : m_vbo(GL_ARRAY_BUFFER), m_ebo(GL_ELEMENT_ARRAY_BUFFER) {
+    const std::vector<Vertex> &vertices,
+    const std::vector<GLuint> &indices,
+    const std::vector<const Texture *> &textures
+  ) {
+    // Check for invalid mesh size
+    if (vertices.size() > MESH_MAX_VERTEX_COUNT)
+      throw Exception("ERROR: Attempted to create mesh with too many vertices!");
+
+    if (indices.size() > MESH_MAX_INDEX_COUNT)
+      throw Exception("ERROR: Attempted to create mesh with too many indices!");
+
     // Copy the vertices
     m_vertices = vertices;
 
@@ -26,65 +33,22 @@ namespace elgar {
 
     // Copy the textures
     m_textures = textures;
-
-    // Copy the color
-    m_color = color;
-
-    // Setup the Mesh
-    m_vao.Bind(); // Bind the VAO
-   
-    m_vbo.Bind(); // Bind the VBO
-    // Send the vertex data to the GPU
-    m_vbo.FillData(&m_vertices[0], m_vertices.size() * sizeof(Vertex), GL_STATIC_DRAW);
-
-    m_ebo.Bind(); // Bind the element buffer
-    // Send the element data to the GPU
-    m_ebo.FillData(&m_indices[0], m_indices.size() * sizeof(GLuint), GL_STATIC_DRAW);
-
-    // Setup the vertex attributes
-
-    // Setup position attribute at location 0
-    m_vao.EnableAttribute(0);
-    m_vao.AttributePointer(
-      0,
-      3,
-      GL_FLOAT,
-      GL_FALSE,
-      sizeof(Vertex),
-      (GLvoid *)0
-    );
-
-    // Setup normal attribute at location 1
-    m_vao.EnableAttribute(1);
-    m_vao.AttributePointer(
-      1,
-      3,
-      GL_FLOAT,
-      GL_FALSE,
-      sizeof(Vertex),
-      (GLvoid *)offsetof(Vertex, m_normal)
-    );
-
-    // Setup texture uv attribute at location 2
-    m_vao.EnableAttribute(2);
-    m_vao.AttributePointer(
-      2,
-      2,
-      GL_FLOAT,
-      GL_FALSE,
-      sizeof(Vertex),
-      (GLvoid *)offsetof(Vertex, m_uv)
-    );
-
-    m_vao.Unbind(); // Unbind the VAO
   }
 
   Mesh::~Mesh() {
     // Do nothing
   }
 
-  void Mesh::Draw(const Shader &shader) const {
-    // Draw the mesh using the shader program
+  const std::vector<Vertex> &Mesh::GetVertices() const {
+    return m_vertices;
+  }
+
+  const std::vector<GLuint> &Mesh::GetIndices() const {
+    return m_indices;
+  }
+
+  const std::vector<const Texture *> &Mesh::GetTextures() const {
+    return m_textures;
   }
 
 }

@@ -18,12 +18,14 @@
 #include "elgar/timers/FrameTimer.hpp"
 
 #include "elgar/graphics/ImageLoader.hpp"
+#include "elgar/graphics/ModelLoader.hpp"
 #include "elgar/graphics/TextureStorage.hpp"
 #include "elgar/graphics/ShaderManager.hpp"
 #include "elgar/graphics/MeshManager.hpp"
 
 #include "elgar/graphics/renderers/SpriteRenderer.hpp"
 #include "elgar/graphics/renderers/TextRenderer.hpp"
+#include "elgar/graphics/renderers/MeshRenderer.hpp"
 
 namespace elgar {
 
@@ -95,17 +97,16 @@ namespace elgar {
     // Initialize the TextRenderer
     new TextRenderer();
 
+    // Initialize the MeshRenderer
+    new MeshRenderer();
+
+    // Initialize the ModelLoader
+    new ModelLoader();
+
   }
 
   void Engine::DisableSubsystems() {
-    // Destroy the audio system
-    if (AudioSystem::GetInstance()) 
-      delete AudioSystem::GetInstance();
-    
-    // Destroy the ImageLoader instance
-    if (ImageLoader::GetInstance()) 
-      delete ImageLoader::GetInstance();
-    
+
     // Destroy the ShaderManager instance
     if (ShaderManager::GetInstance()) 
       delete ShaderManager::GetInstance();
@@ -113,10 +114,6 @@ namespace elgar {
     // Destroy the MeshManager instance
     if (MeshManager::GetInstance())
       delete MeshManager::GetInstance();
-
-    // Destroy the TextureStorage instance
-    if (TextureStorage::GetInstance())
-      delete TextureStorage::GetInstance();
 
     // Destroy the Renderer2D instance
     if (SpriteRenderer::GetInstance())
@@ -126,6 +123,25 @@ namespace elgar {
     if (TextRenderer::GetInstance())
       delete TextRenderer::GetInstance();
 
+    // Destroy the MeshRenderer instance
+    if (MeshRenderer::GetInstance())
+      delete MeshRenderer::GetInstance();
+
+    if (ModelLoader::GetInstance())
+      delete ModelLoader::GetInstance();
+
+    // Destroy the TextureStorage instance
+    if (TextureStorage::GetInstance())
+      delete TextureStorage::GetInstance();
+
+    // Destroy the ImageLoader instance
+    if (ImageLoader::GetInstance()) 
+      delete ImageLoader::GetInstance();
+
+    // Destroy the audio system
+    if (AudioSystem::GetInstance()) 
+      delete AudioSystem::GetInstance();
+    
   }
 
   void Engine::Run(void (*update)(), void (*fixed_update)(), void (*render)()) {

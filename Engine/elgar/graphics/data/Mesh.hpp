@@ -11,12 +11,16 @@
 
 #include "elgar/graphics/data/Vertex.hpp"
 #include "elgar/graphics/data/Texture.hpp"
-#include "elgar/graphics/data/RGBA.hpp"
 #include "elgar/graphics/buffers/BufferObject.hpp"
 #include "elgar/graphics/buffers/VertexArrayObject.hpp"
 #include "elgar/graphics/Shader.hpp"
 
 #include <vector>
+
+// DEFINES //
+
+#define MESH_MAX_VERTEX_COUNT   65536
+#define MESH_MAX_INDEX_COUNT    MESH_MAX_VERTEX_COUNT * 6   // TODO: Figure out actual max later
 
 namespace elgar {
 
@@ -30,13 +34,6 @@ namespace elgar {
     std::vector<GLuint> m_indices;    // The indices of the Mesh
     std::vector<const Texture *> m_textures;    // The textures of the Mesh
 
-    RGBA m_color;     // The Mesh color
-
-  private:
-    VertexArrayObject m_vao;          // The vertex array object for the mesh
-    BufferObject      m_vbo;          // The vertex buffer for the mesh
-    BufferObject      m_ebo;          // The element buffer for the mesh
-
   public:
     /**
      * @brief Construct a new Mesh object
@@ -44,13 +41,11 @@ namespace elgar {
      * @param vertices    The vertices of the Mesh
      * @param indices     The element indices of the Mesh
      * @param textures    The textures of the Mesh
-     * @param color       The color of the Mesh
      */
     Mesh(
-      const std::vector<Vertex> vertices,
-      const std::vector<GLuint> indices,
-      const std::vector<const Texture *> textures,
-      const RGBA &color
+      const std::vector<Vertex> &vertices,
+      const std::vector<GLuint> &indices,
+      const std::vector<const Texture *> &textures
     );
 
     /**
@@ -60,11 +55,25 @@ namespace elgar {
     virtual ~Mesh();
 
     /**
-     * @brief Draw the Mesh using a Shader program
+     * @brief Get the vertices of the Mesh as a reference
      * 
-     * @param shader    Const reference to the compiled Shader to render with
+     * @return Reference to the vertices of the Mesh
      */
-    void Draw(const Shader &shader) const;
+    const std::vector<Vertex> &GetVertices() const;
+
+    /**
+     * @brief Get the indices of the Mesh as a reference
+     * 
+     * @return Reference to the indices of the Mesh
+     */
+    const std::vector<GLuint> &GetIndices() const;
+
+    /**
+     * @brief Get the textures of the Mesh as a reference
+     * 
+     * @return Reference to the textures of the Mesh
+     */
+    const std::vector<const Texture *> &GetTextures() const;
 
   };
 

@@ -26,6 +26,7 @@ PKG_SEARCH_MODULE(FREEALUT REQUIRED freealut)
 PKG_SEARCH_MODULE(FREETYPE2 REQUIRED freetype2)
 PKG_SEARCH_MODULE(GL REQUIRED gl)
 PKG_SEARCH_MODULE(GLEW REQUIRED glew)
+PKG_SEARCH_MODULE(ASSIMP REQUIRED assimp)
 
 # Add all source files to the library
 file(GLOB_RECURSE elgar_src "src/*.cpp")
@@ -36,6 +37,7 @@ target_include_directories(Elgar PRIVATE .)
 target_include_directories(Elgar PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(Elgar PRIVATE ${FREETYPE2_INCLUDE_DIRS})
 target_include_directories(Elgar PRIVATE ${GLM_INCLUDE_DIRS})
+target_include_directories(Elgar PRIVATE ${ASSIMP_INCLUDE_DIRS})
 
 # Link the libraries
 target_link_libraries(Elgar ${SDL2_LIBRARIES})
@@ -44,6 +46,7 @@ target_link_libraries(Elgar ${FREEALUT_LIBRARIES})
 target_link_libraries(Elgar ${FREETYPE2_LIBRARIES})
 target_link_libraries(Elgar ${GL_LIBRARIES})
 target_link_libraries(Elgar ${GLEW_LIBRARIES})
+target_link_libraries(Elgar ${ASSIMP_LIBRARIES})
 
 # Generate documentation
 find_package(Doxygen)

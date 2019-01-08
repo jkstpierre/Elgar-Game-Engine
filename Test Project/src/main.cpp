@@ -35,8 +35,6 @@ using namespace elgar;
 
 Engine *engine = nullptr;
 
-const Shader *basic_shader = nullptr;
-const Shader *text_shader = nullptr;
 Texture *texture = nullptr;
 
 std::vector<glm::mat4> models;
@@ -74,6 +72,9 @@ void render() {
   static SpriteRenderer *spr_rend = SpriteRenderer::GetInstance();
   static TextRenderer *tex_rend = TextRenderer::GetInstance();
 
+  static const Shader *basic_shader = ShaderManager::GetInstance()->GetShader(SHADER_BASIC_PROGRAM);
+  static const Shader *text_shader = ShaderManager::GetInstance()->GetShader(SHADER_TEXT_PROGRAM);
+
   // Nothing to do if renderer does not exist
   if (!spr_rend || !tex_rend)
     return;
@@ -81,8 +82,8 @@ void render() {
   if (!basic_shader || !text_shader)
     return;
 
-  camera.Draw(*basic_shader);   // Draw the camera
-  camera.Draw(*text_shader);     
+  camera.Draw(*basic_shader);   // Draw the camera for the basic shader
+  camera.Draw(*text_shader);    // Draw the camera for the text shader
 
   spr_rend->DrawInstanced(
     *basic_shader,
@@ -98,7 +99,19 @@ void render() {
       texture
   );
 
-  tex_rend->Draw(*text_shader, "What day Is ITTT!", {0xFF, 0xFF, 0xFF, 0xFF}, glm::translate(glm::mat4(), {600, 400, 0}), 1.0f);
+  tex_rend->Draw(
+    *text_shader, 
+    "Wow, I can't believe this worked", 
+    {0x00, 0x0F, 0xF0, 0xFF}, 
+    glm::rotate(
+      glm::translate(
+        glm::mat4(),
+        {600, 600, 0}
+      ), 
+      0.0f,
+      {0.0f, 0.0f, 1.0f}
+    )
+  );
 }
 
 int main() {
@@ -116,9 +129,6 @@ int main() {
   if (img) {
     texture = new Texture(*img);  // Create a texture
   }
-
-  basic_shader = ShaderManager::GetInstance()->GetShader(SHADER_BASIC_PROGRAM);
-  text_shader  = ShaderManager::GetInstance()->GetShader(SHADER_TEXT_PROGRAM);
 
   for(int i = 0; i < INSTANCE_COUNT; i++) {
     models.push_back(
