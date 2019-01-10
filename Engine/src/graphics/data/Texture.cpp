@@ -12,15 +12,17 @@ namespace elgar {
 
   // FUNCTIONS //
 
-  Texture::Texture(const Image &image, const TextureParams &params) {
+  Texture::Texture(const Image &image, const TextureType &type, const TextureParams &params) {
     glGenTextures(1, &m_id);  // Generate a new OpenGL texture
     this->Bind(); // Bind the texture
+
+    m_type = type;  // Copy the type
 
     // Set the texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrap_mode);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.wrap_mode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.filter_mode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.filter_mode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.min_filter_mode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.mag_filter_mode);
 
     GLint mode = GL_RGB;
     if (image.channels == 1) {
@@ -76,6 +78,10 @@ namespace elgar {
 
   const GLsizei &Texture::GetHeight() const {
     return m_height;
+  }
+
+  const TextureType &Texture::GetType() const {
+    return m_type;
   }
 
 }

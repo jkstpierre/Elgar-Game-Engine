@@ -8,6 +8,9 @@
 
 #include "elgar/graphics/ModelLoader.hpp"
 #include "elgar/core/Macros.hpp"
+#include "elgar/graphics/TextureStorage.hpp"
+#include "elgar/graphics/ImageLoader.hpp"
+#include "elgar/core/Exception.hpp"
 
 namespace elgar {
 
@@ -42,6 +45,9 @@ namespace elgar {
       LOG("ERROR: Failed to load model %s from disk! Error: %s\n", path.c_str(), import.GetErrorString());
       return nullptr;   // Failed to load model
     }
+
+    // Set the current directory
+    m_curr_directory = path.substr(0, path.find_last_of('/'));
 
     // Build our model
     Model *new_model = BuildModel(scene->mRootNode, scene); 
@@ -117,7 +123,78 @@ namespace elgar {
 
     // TODO: Handle materials loading
 
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];   // Grab pointer to material
+
+    // Get diffuse maps
+    std::vector<const Texture *> diffuse_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TEXTURE_DIFFUSE);
+    textures.insert(textures.end(), diffuse_maps.begin(), diffuse_maps.end());
+
+    // Get specular maps
+    std::vector<const Texture *> specular_maps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TEXTURE_SPECULAR);
+    textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
+
+    // Get normal maps
+    std::vector<const Texture *> normal_maps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TEXTURE_HEIGHT);
+    textures.insert(textures.end(), normal_maps.begin(), normal_maps.end());
+
+    // Get height maps
+    std::vector<const Texture *> height_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_AMBIENT);
+    textures.insert(textures.end(), height_maps.begin(), height_maps.end());
+
+    // Build the mesh and return it
     return Mesh(vertices, indices, textures);
+  }
+
+  std::vector<const Texture *> ModelLoader::LoadMaterialTextures(aiMaterial *material, const aiTextureType &type, const TextureType &gl_type) {
+    std::vector<const Texture *> textures;
+    TextureStorage *texture_storage = TextureStorage::GetInstance();
+    ImageLoader *image_loader = ImageLoader::GetInstance();
+
+    // If texture storage has not been setup!
+    if (!texture_storage) {
+      throw Exception("ERROR: ModelLoader attempted to load a model prior to TextureStorage class initialization!");
+    }
+
+    // If image loader has not been setup!
+    if (!image_loader) {
+      throw Exception("ERROR: ModelLoader attempted to load a model prior to ImageLoader class initialization!");
+    }
+
+    for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {
+      aiString str;   
+      material->GetTexture(type, i, &str);    // Get the name of the texture
+
+      // Build absolute path to texture
+      std::string path = m_curr_directory + '/' + std::string(str.C_Str());
+
+      const Texture *tex = texture_storage->Load(path); // Attempt to load texture from memory
+      if (tex) {
+        textures.push_back(tex);    // Add texture
+      }
+      else {
+        // Create a new image
+        if (!image_loader->LoadFromDisk(path)) {
+          throw Exception("ERROR: ImageLoader failed to load image " + path + " for ModelLoader!");
+        }
+
+        const Image *image = image_loader->Read(path);  // Get the new image
+        if (!image) {
+          throw Exception("ERROR: ImageLoader failed to retrieve image " + path + " for ModelLoader!");
+        }
+
+        // Create new texture
+        const Texture *new_texture = new Texture(*image, gl_type, {GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR});
+
+        // Save the texture to the texture storage
+        texture_storage->Save(path, new_texture);
+
+        // Add the texture
+        textures.push_back(new_texture);
+      }
+    }
+
+    // Return the material textures
+    return textures;
   }
 
 }

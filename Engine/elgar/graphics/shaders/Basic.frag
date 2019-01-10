@@ -14,6 +14,7 @@ R""(
 
 layout (location = 0) out vec4 fragment_color;        // Output pixel color
 
+
 // Fragment uniforms
 uniform sampler2D   texture_sampler;        // The texture to sample from
 uniform bool        use_texture;    // If true, sample from texture

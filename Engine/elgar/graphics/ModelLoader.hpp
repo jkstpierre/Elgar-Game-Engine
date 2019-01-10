@@ -22,13 +22,14 @@
 namespace elgar {
 
   /**
-   * @brief The ModelLoader class handles the loading of models from disk using the assimp library
+   * @brief The ModelLoader class handles the loading of models from disk using the assimp library (NOTE: This class must be initialized after TextureStorage)
    * 
    */
   class ModelLoader : public Singleton<ModelLoader> {
   friend class Engine;    // Only let Engine instantiate
   private:
     std::unordered_map<std::string, Model*> m_models;  // Set of models in memory
+    std::string m_curr_directory;   // The current directory the ModelLoader is loading from
 
   private:
     /**
@@ -69,6 +70,16 @@ namespace elgar {
      * @return A new OpenGL Mesh
      */
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+
+    /**
+     * @brief Load the textures from a given material
+     * 
+     * @param material    Reference to the material
+     * @param type        The assimp material type
+     * @param gl_type     The Elgar3D texture type
+     * @return Vector containing const pointers to each texture
+     */
+    std::vector<const Texture *> LoadMaterialTextures(aiMaterial *material, const aiTextureType &type, const TextureType &gl_type);
 
   public:
     /**

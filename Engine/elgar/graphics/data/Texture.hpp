@@ -13,6 +13,10 @@
 
 #include "elgar/graphics/data/Image.hpp"
 
+// DEFINES //
+
+
+
 namespace elgar {
   /**
    * @brief     The TextureParams struct details how to render the texture
@@ -20,7 +24,19 @@ namespace elgar {
    */
   struct TextureParams {
     GLint   wrap_mode;
-    GLint   filter_mode;
+    GLint   min_filter_mode;
+    GLint   mag_filter_mode;
+  };
+
+  /**
+   * @brief     The TextureType enum represents the four categories that a texture can be
+   * 
+   */
+  enum TextureType {
+    TEXTURE_DIFFUSE,    // This is a diffuse map
+    TEXTURE_SPECULAR,   // This is a specular map
+    TEXTURE_AMBIENT,    // This is an ambient map
+    TEXTURE_HEIGHT      // This is a height map
   };
 
   /**
@@ -28,18 +44,29 @@ namespace elgar {
    */
   class Texture {
   private:
-    GLuint  m_id;       // The id of the OpenGL texture
-    GLsizei m_width;    // The width in pixels
-    GLsizei m_height;   // The height in pixels
+    GLuint  m_id;             // The id of the OpenGL texture
+    TextureType  m_type;      // The type of the OpenGL texture
+    
+    GLsizei m_width;          // The width in pixels
+    GLsizei m_height;         // The height in pixels
 
   public:
     /**
      * @brief       Builds a new Texture from Image data
      *
-     * @param       Reference to the Image data to build texture from
-     * @param       TextureParams struct containing data on how to render the texture
+     * @param image       Reference to the Image data to build texture from
+     * @param type        The type of texture this is
+     * @param params      TextureParams struct containing data on how to render the texture
      */
-    Texture(const Image &image, const TextureParams &params = {GL_REPEAT, GL_LINEAR});
+    Texture(
+      const Image &image, 
+      const TextureType &type, 
+      const TextureParams &params = {
+        GL_REPEAT, 
+        GL_LINEAR,
+        GL_LINEAR
+      }
+    );
 
     /**
      * @brief      Destroys a Texture
@@ -91,6 +118,14 @@ namespace elgar {
      * @return Reference to the Texture height
      */
     const GLsizei &GetHeight() const;
+
+    /**
+     * @brief Get the type of the Texture
+     * 
+     * @return Reference to the TextureType
+     */
+    const TextureType &GetType() const;
+
   };
 }
 

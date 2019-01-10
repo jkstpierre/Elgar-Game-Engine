@@ -114,7 +114,13 @@ namespace elgar {
     else {
       shader.SetBool("use_texture", GL_TRUE);
 
+      // Grab reference to the mesh textures
+      const std::vector<const Texture *> &textures = mesh.GetTextures();
+
       // TODO: Bind the textures of the mesh
+      for (unsigned int i = 0; i < textures.size(); i++) {
+        
+      }
     }
 
     // Draw the mesh

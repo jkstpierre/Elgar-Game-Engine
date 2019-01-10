@@ -31,7 +31,7 @@ using namespace elgar;
 
 #define WIDTH 1920
 #define HEIGHT 1080
-#define INSTANCE_COUNT  100000
+#define INSTANCE_COUNT  100
 
 Engine *engine = nullptr;
 
@@ -96,7 +96,7 @@ void render() {
       *basic_shader,
       glm::scale(glm::mat4(), {100.0f, 100.0f, 0.0f}),
       {0x12, 0x23, 0x34, 0xFF},
-      texture
+      nullptr
   );
 
   tex_rend->Draw(
@@ -127,7 +127,7 @@ int main() {
   const Image *img = image_loader->Read("destroyer");
 
   if (img) {
-    texture = new Texture(*img);  // Create a texture
+    texture = new Texture(*img, TEXTURE_DIFFUSE);  // Create a texture
   }
 
   for(int i = 0; i < INSTANCE_COUNT; i++) {

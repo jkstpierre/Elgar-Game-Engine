@@ -132,10 +132,11 @@ namespace elgar {
       // Texture params
       TextureParams tex_params;
       tex_params.wrap_mode = GL_CLAMP_TO_EDGE;
-      tex_params.filter_mode = GL_LINEAR;
+      tex_params.min_filter_mode = GL_LINEAR;
+      tex_params.mag_filter_mode = GL_LINEAR;
 
       // Create a new texture
-      const Texture *tex = new Texture(char_img, tex_params);
+      const Texture *tex = new Texture(char_img, TEXTURE_DIFFUSE, tex_params);
 
       // Create an ASCII character to store relevant data
       ASCII character;
