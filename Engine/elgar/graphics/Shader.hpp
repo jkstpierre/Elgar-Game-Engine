@@ -25,7 +25,8 @@ namespace elgar {
   private:
     GLuint m_id;  // The shader program id
 
-    std::unordered_map<std::string, GLint> m_uniforms;  // Hash table of all uniform locations
+    std::unordered_map<std::string, GLint> m_uniform_cache;   // Cache of uniform locations
+    std::unordered_map<std::string, GLint> m_attrib_cache;    // Cache of attribute locations
 
   private:
     /**
@@ -41,6 +42,22 @@ namespace elgar {
      * @brief      Destroys a Shader
      */
     virtual ~Shader();
+
+    /**
+     * @brief Checks uniform cache for the given uniform, updates the cache if necessary
+     * 
+     * @param name    The name of the uniform in the GLSL source code
+     * @return GLint  The location of the uniform, or -1 if not found
+     */
+    GLint UpdateUniformCache(const std::string &name);
+
+    /**
+     * @brief Checks attribute cache for the given attribute, updates the cache if necessary
+     * 
+     * @param name    The name of the attribute in the GLSL source code
+     * @return GLint  The location of the attribute, or -1 if not found
+     */
+    GLint UpdateAttributeCache(const std::string &name);
 
   public:
     /**
@@ -155,6 +172,47 @@ namespace elgar {
      * @param[in]  mat   The matrix
      */
     void SetMat4(const std::string &name, const glm::mat4 &mat) const;
+
+    /**
+     * @brief Enable an attribute in the loaded shader program
+     * 
+     * @param name The name of the attribute in the GLSL source code
+     */
+    void EnableAttribute(const std::string &name) const;
+
+    /**
+     * @brief Disable an attribute in the loaded shader program
+     * 
+     * @param name The name of the attribute in the GLSL source code
+     */
+    void DisableAttribute(const std::string &name) const;
+
+    /**
+     * @brief Tell OpenGL how to format the currently bound array buffer's data
+     * 
+     * @param name          The name of the attribute to associate with the currently bound buffer
+     * @param size          The number of elements in the attribute
+     * @param type          The data type of the attribute
+     * @param normalized    Should GLSL normalize the attribute data
+     * @param stride        How many bytes until next occurance of the attribute
+     * @param pointer       What is the offset in bytes until the start of the attribute
+     */
+    void AttributePointer(
+      const std::string &name,
+      const GLint &size,
+      const GLenum &type,
+      const GLboolean &normalized,
+      const GLsizei &stride,
+      const GLvoid *pointer
+    ) const;
+
+    /**
+     * @brief Set the attribute divisor during instanced rendering
+     * 
+     * @param name      The name of the attribute to set
+     * @param divisor   The divisor to give to the attribute
+     */
+    void AttributeDivisor(const std::string &name, const GLuint &divisor) const;
 
   };
 

@@ -111,6 +111,34 @@ namespace elgar {
     LOG("Shader destroyed...\n");
   }
 
+  GLint Shader::UpdateUniformCache(const std::string &name) {
+    if (m_uniform_cache.find(name) != m_uniform_cache.end())
+      return m_uniform_cache.at(name);
+
+    GLint loc = glGetUniformLocation(m_id, name.c_str());
+
+    if (loc == -1)
+      return -1;
+
+    m_uniform_cache.insert(std::pair<std::string, GLint>(name, loc));
+
+    return loc;
+  }
+
+  GLint Shader::UpdateAttributeCache(const std::string &name) {
+    if (m_attrib_cache.find(name) != m_attrib_cache.end())
+      return m_attrib_cache.at(name);
+
+    GLint loc = glGetAttribLocation(m_id, name.c_str());
+
+    if (loc == -1)
+      return -1;
+    
+    m_attrib_cache.insert(std::pair<std::string, GLint>(name, loc));
+
+    return loc;
+  }
+
   void Shader::Use() const {
     glUseProgram(m_id);
   }
@@ -169,6 +197,40 @@ namespace elgar {
 
   void Shader::SetMat4(const std::string &name, const glm::mat4 &mat) const {
       glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+  }
+
+  void Shader::EnableAttribute(const std::string &name) const {
+    glEnableVertexAttribArray(glGetAttribLocation(m_id, name.c_str()));
+  }
+
+  void Shader::DisableAttribute(const std::string &name) const {
+    glDisableVertexAttribArray(glGetAttribLocation(m_id, name.c_str()));
+  }
+
+  void Shader::AttributePointer(
+    const std::string &name,
+    const GLint &size,
+    const GLenum &type,
+    const GLboolean &normalized,
+    const GLsizei &stride,
+    const GLvoid *pointer
+  ) const {
+    const GLint location = glGetAttribLocation(m_id, name.c_str());   // Get the location of the attribute
+
+    if (location >= 0) {
+      glVertexAttribPointer(
+        location,
+        size,
+        type,
+        normalized,
+        stride,
+        pointer
+      );
+    }
+  }
+
+  void Shader::AttributeDivisor(const std::string &name, const GLuint &divisor) const {
+    glVertexAttribDivisor(glGetAttribLocation(m_id, name.c_str()), divisor);
   }
 
 }

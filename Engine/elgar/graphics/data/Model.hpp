@@ -10,6 +10,9 @@
 // INCLUDES //
 
 #include "elgar/graphics/data/Mesh.hpp"
+#include "elgar/graphics/TextureStorage.hpp"
+
+#include <string>
 
 namespace elgar {
 

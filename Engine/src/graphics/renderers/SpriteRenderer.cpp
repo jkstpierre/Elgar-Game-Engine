@@ -46,11 +46,11 @@ namespace elgar {
       GL_STATIC_DRAW    // Data will not be modified
     );
 
-    m_uv_buffer.Bind(); // Bind the uv buffer
+    m_uv_buffer.Bind(); // Setup the uv buffer
     m_uv_buffer.FillData(
-      &default_uvs[0][0],       // Send the uvs to OpenGL
-      sizeof(glm::vec2) * default_uvs.size(),         // Tell OpenGL the number of bytes to allocate
-      GL_STATIC_DRAW    // Data will not be modified
+      NULL,                   // Orphan the buffer for later rendering
+      sizeof(glm::vec2) * default_vertices.size(),    // Allocate buffer size
+      GL_DYNAMIC_DRAW   // Data will be modified frequently
     );
 
     // Tell the VAO how the data is formatted
